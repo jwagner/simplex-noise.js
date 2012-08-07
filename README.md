@@ -29,7 +29,7 @@ var simplex = new SimplexNoise(Math.random),
     value2d = simplex.noise2D(x, y);
 ```
 
-# node.js
+## node.js
 
 Node.js is also supported, you can install the package using [npm](https://npmjs.org/package/simplex-noise).
 
