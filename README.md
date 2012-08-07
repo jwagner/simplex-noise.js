@@ -28,8 +28,8 @@ var simplex = new SimplexNoise(Math.random),
 
 ## Benchmarks
 
-[Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise)
-[Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
+- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise)
+- [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
 
 ## Changelog
 
