@@ -26,6 +26,11 @@ var simplex = new SimplexNoise(Math.random),
     value2d = simplex.noise2D(x, y);
 ```
 
+## Benchmarks
+
+[Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise)
+[Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
+
 ## Changelog
 
 ### 1.0.0
