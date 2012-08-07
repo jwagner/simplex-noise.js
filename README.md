@@ -1,6 +1,6 @@
 # simplex-noise.js
 
-simplex-noise.js is a fast simplex noise implementation in Javascript.
+simplex-noise.js is a fast simplex noise implementation in Javascript. It works in the browser and on nodejs.
 
 ## Requirements
 
@@ -28,6 +28,10 @@ used to build the permutation table:
 var simplex = new SimplexNoise(Math.random),
     value2d = simplex.noise2D(x, y);
 ```
+
+# node.js
+
+Node.js is also supported, you can install the package using [npm](https://npmjs.org/package/simplex-noise).
 
 ## Benchmarks
 
