@@ -8,7 +8,7 @@ It requires typed arrays, if you want to use it in browsers without support
 you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
 
 ## Demo
-Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/UL69K/4/).
+Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/UL69K/5/).
 
 ## Usage
 
