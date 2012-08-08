@@ -41,7 +41,7 @@ var SimplexNoise = require('simplex-noise'),
 
 ## Benchmarks
 
-- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise)
+- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise/2)
 - [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
 
 ## Tests
