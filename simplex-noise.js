@@ -340,7 +340,11 @@
     };
 
 if(typeof window !== 'undefined') window.SimplexNoise = SimplexNoise;
-// nodejs
+//common js
 if(typeof exports !== 'undefined') exports.SimplexNoise = SimplexNoise;
+// nodejs
+if(typeof module !== 'undefined') {
+    module.exports = SimplexNoise;
+}
 
 })();

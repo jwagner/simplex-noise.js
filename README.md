@@ -33,12 +33,32 @@ var simplex = new SimplexNoise(Math.random),
 
 Node.js is also supported, you can install the package using [npm](https://npmjs.org/package/simplex-noise).
 
+```javascript
+var SimplexNoise = require('simplex-noise'),
+    simplex = new SimplexNoise(Math.random),
+    value2d = simplex.noise2D(x, y);
+```
+
 ## Benchmarks
 
 - [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise)
 - [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
 
+## Tests
+
+There are some simple buster.js tests for this library to run them first install buster.js and jshint:
+```shell
+npm install buster.js
+# if you haven't done so already
+npm install -g jshint
+make tests
+```
+
 ## Changelog
+
+### 2.0.0
+- Changed node.js api, SimplexNoise is now exported directly.
+- Added unit tests
 
 ### 1.0.0
 - Initial Release
