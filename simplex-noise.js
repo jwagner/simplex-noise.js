@@ -1,6 +1,3 @@
-/**
- * Copyright (C) 2012 Jonas Wagner
- */
 /*
  * A fast javascript implementation of simplex noise by Jonas Wagner
  *
