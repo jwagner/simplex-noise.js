@@ -1,6 +1,6 @@
 if(typeof require !== 'undefined'){
     var buster = require("buster");
-    var SimplexNoise = require("../simplex-noise").SimplexNoise;
+    var SimplexNoise = require("../simplex-noise");
 }
 
 var assert = buster.assertions.assert,
