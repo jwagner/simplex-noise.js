@@ -56,6 +56,9 @@ make tests
 
 ## Changelog
 
+### 2.1.0
+- AMD support
+
 ### 2.0.0
 - Changed node.js api, SimplexNoise is now exported directly.
 - Added unit tests
