@@ -1,5 +1,6 @@
 {
     "predef": [
+        'define'
     ],
     "browser" : true,
     "node" : true,
