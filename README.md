@@ -56,6 +56,9 @@ make tests
 
 ## Changelog
 
+### 2.1.1
+- Increased entropy by fixing a little initialization issue.
+
 ### 2.1.0
 - AMD support
 
