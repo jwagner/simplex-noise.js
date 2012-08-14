@@ -45,7 +45,7 @@ function SimplexNoise(random) {
     this.perm = new Uint8Array(512);
     this.permMod12 = new Uint8Array(512);
     for (var i = 0; i < 256; i++) {
-        this.p[i] = random() * 255;
+        this.p[i] = random() * 256;
     }
     for (i = 0; i < 512; i++) {
         this.perm[i] = this.p[i & 255];

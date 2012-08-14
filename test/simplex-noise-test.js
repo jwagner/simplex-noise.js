@@ -26,16 +26,16 @@ buster.testCase("simplex-noise", {
         }
     },
     "should initialize with a custom random function": function () {
-        var i = 1,
+        var i = 2,
             simplex = new SimplexNoise(function(){return 1.0/i++;});
             assert.equals(simplex.perm.length, 512);
             assert.equals(simplex.permMod12.length, 512);
-            assert.equals(simplex.perm[0], 255);
-            assert.equals(simplex.perm[1], 127);
-            assert.equals(simplex.perm[256], 255);
-            assert.equals(simplex.perm[257], 127);
-            assert.equals(simplex.permMod12[0], 255%12);
-            assert.equals(simplex.permMod12[1], 127%12);
+            assert.equals(simplex.perm[0], 128);
+            assert.equals(simplex.perm[1], 85);
+            assert.equals(simplex.perm[256], 128);
+            assert.equals(simplex.perm[257], 85);
+            assert.equals(simplex.permMod12[0], 128%12);
+            assert.equals(simplex.permMod12[1], 85%12);
     },
     'noise': {
         setUp: function() {
