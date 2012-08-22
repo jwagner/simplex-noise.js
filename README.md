@@ -44,6 +44,10 @@ var SimplexNoise = require('simplex-noise'),
 - [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise/2)
 - [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
 
+For development you can open `perf/index.html` and watch the console or run `node perf/benchmark.js` in a shell.
+There is also a rake task for comparing your current changes can also run `make compare`.
+The command works using git stash.
+
 ## Tests
 
 There are some simple buster.js tests for this library to run them first install buster.js and jshint:
@@ -55,6 +59,9 @@ make tests
 ```
 
 ## Changelog
+
+### master
+- Small performance improvement for 2D noise
 
 ### 2.1.1
 - Increased entropy by fixing a little initialization issue.
