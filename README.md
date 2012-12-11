@@ -9,6 +9,7 @@ you will need to use a polyfill like [typedarray.js](http://www.calormen.com/pol
 
 ## Demo
 Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/UL69K/5/).
+A more complex [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example
 
 ## Usage
 
