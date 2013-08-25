@@ -8,7 +8,7 @@ It requires typed arrays, if you want to use it in browsers without support
 you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
 
 ## Demo
-Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/UL69K/5/).
+Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/9f8fV/).
 A more complex [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example
 
 ## Usage

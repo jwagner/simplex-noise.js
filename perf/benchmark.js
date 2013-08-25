@@ -24,6 +24,15 @@ var suite = new Benchmark.Suite('simplex-noise')
               }
         }
     })
+    .add('noise3D2', function() {
+         for(var x = 0; x < 8; x++){
+              for(var y = 0; y < 8; y++){
+                      for(var z = 0; z < 8; z++){
+                          simplex.noise3D(x/8, y/8, z/8);
+                      }
+              }
+        }
+    })
     .add('noise4D', function() {
           for(var x = 0; x < 8; x++){
               for(var y = 0; y < 8; y++){
