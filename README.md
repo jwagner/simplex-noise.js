@@ -19,7 +19,7 @@ A more complex [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld
 var simplex = new SimplexNoise(),
     value2d = simplex.noise2D(x, y),
     value3d = simplex.noise3D(x, y, z),
-    value4d = simplex.noise2D(x, y, z, w);
+    value4d = simplex.noise4D(x, y, z, w);
 ```
 
 You can also pass an alternative random function to the constructor that is
