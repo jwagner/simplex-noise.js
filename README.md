@@ -63,7 +63,7 @@ The command works using git stash.
 
 There are some simple buster.js tests for this library to run them first install buster.js and jshint:
 ```shell
-npm install buster.js
+npm install buster
 # if you haven't done so already
 npm install -g jshint
 make tests

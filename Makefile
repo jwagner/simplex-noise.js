@@ -2,7 +2,7 @@ all: tests simplex-noise.min.js
 
 tests:
 	jshint simplex-noise.js
-	./node_modules/buster/bin/buster test
+	./node_modules/buster/bin/buster-test
 
 benchmark:
 	node ./perf/benchmark.js
