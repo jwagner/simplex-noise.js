@@ -3,8 +3,8 @@ if(typeof require !== 'undefined'){
     var SimplexNoise = require("../simplex-noise");
 }
 
-var assert = buster.assertions.assert,
-    refute = buster.assertions.refute;
+var assert = buster.assert,
+    refute = buster.refute;
 
 var _rnd;
 function random(){
