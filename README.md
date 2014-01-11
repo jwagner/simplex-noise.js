@@ -52,8 +52,8 @@ var SimplexNoise = require('simplex-noise'),
 
 ## Benchmarks
 
-- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise/2)
-- [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison)
+- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise/4)
+- [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison/3)
 
 For development you can open `perf/index.html` and watch the console or run `node perf/benchmark.js` in a shell.
 There is also a rake task for comparing your current changes can also run `make compare`.
