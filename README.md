@@ -87,7 +87,9 @@ make tests
 ### 1.0.0
 - Initial Release
 
-## Credits
+## License
+Copyright (c) 2014 Jonas Wanger, licensed under the MIT License (enclosed)
 
+## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
 by Stefan Gustavson and Peter Eastman.
