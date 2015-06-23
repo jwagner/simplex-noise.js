@@ -395,7 +395,7 @@ if (typeof define !== 'undefined' && define.amd) define(function(){return Simple
 //common js
 if (typeof exports !== 'undefined') exports.SimplexNoise = SimplexNoise;
 // browser
-else if (typeof navigator !== 'undefined') this.SimplexNoise = SimplexNoise;
+else if (typeof window !== 'undefined') window.SimplexNoise = SimplexNoise;
 // nodejs
 if (typeof module !== 'undefined') {
     module.exports = SimplexNoise;

@@ -71,7 +71,7 @@ make tests
 
 ## Changelog
 
-### master
+### 2.2.0
 - Small performance improvement for 2D noise
 
 ### 2.1.1
