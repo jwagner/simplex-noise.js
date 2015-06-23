@@ -8,7 +8,7 @@ It requires typed arrays, if you want to use it in browsers without support
 you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
 
 ## Demo
-Simple 2D plasma demo on [jsfiddle.net](http://jsfiddle.net/9f8fV/).
+Simple 2D plasma demo on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
 A more complex [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example
 
 ## Usage
@@ -38,7 +38,7 @@ var random = new Alea(seed),
     value2d = simplex.noise2D(x, y);
 ```
 
-The ALEA PRNG can be found on [npm](https://npmjs.org/package/alea) of course.
+The ALEA PRNG can be found on [npm](https://npmjs.org/package/alea).
 
 ## node.js
 
@@ -88,7 +88,7 @@ make tests
 - Initial Release
 
 ## License
-Copyright (c) 2014 Jonas Wanger, licensed under the MIT License (enclosed)
+Copyright (c) 2015 Jonas Wanger, licensed under the MIT License (enclosed)
 
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
