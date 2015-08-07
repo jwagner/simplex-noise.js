@@ -4,7 +4,7 @@
   "version": "0.7.8",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "authors": [
-    "Jonas Wagner"
+    "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)"
   ],
   "description": "A fast simplex noise implementation.",
   "moduleType": [
