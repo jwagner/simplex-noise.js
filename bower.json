@@ -1,0 +1,30 @@
+{
+  "name": "simplex-noise.js",
+  "main": "simplex-noise.js",
+  "version": "0.7.8",
+  "homepage": "https://github.com/jwagner/simplex-noise.js",
+  "authors": [
+    "Jonas Wagner"
+  ],
+  "description": "A fast simplex noise implementation.",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "Simplex",
+    "noise"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    ".jshintrc",
+    "bower_components",
+    "Makefile",
+    "node_modules",
+    "perf",
+    "test",
+    "tests"
+  ]
+}
