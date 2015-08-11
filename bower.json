@@ -1,20 +1,24 @@
 {
-  "name": "simplex-noise.js",
+  "name": "simplex-noise",
   "main": "simplex-noise.js",
-  "version": "0.7.8",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "authors": [
     "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)"
   ],
-  "description": "A fast simplex noise implementation.",
+  "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "moduleType": [
     "amd",
     "globals",
     "node"
   ],
   "keywords": [
-    "Simplex",
-    "noise"
+      "noise",
+      "random",
+      "simplex",
+      "plasma",
+      "procedural",
+      "gfx",
+      "generative"
   ],
   "license": "MIT",
   "ignore": [
