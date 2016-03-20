@@ -32,56 +32,108 @@
 (function () {
 "use strict";
 
+// precomputing a few interpolant coefficients
 var F2 = 0.5 * (Math.sqrt(3.0) - 1.0),
     G2 = (3.0 - Math.sqrt(3.0)) / 6.0,
+    G2_2 = 2.0 * G2,
     F3 = 1.0 / 3.0,
     G3 = 1.0 / 6.0,
+    G3_2 = 2.0 * G3,
+    G3_3 = 3.0 * G3,
     F4 = (Math.sqrt(5.0) - 1.0) / 4.0,
-    G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
+    G4 = (5.0 - Math.sqrt(5.0)) / 20.0,
+    G4_2 = 2.0 * G4,
+    G4_3 = 3.0 * G4,
+    G4_4 = 4.0 * G4;
 
 
 function SimplexNoise(random) {
     if (!random) random = Math.random;
-    this.p = new Uint8Array(256);
+    //this.p = new Uint8Array(256);
     this.perm = new Uint8Array(512);
-    this.permMod12 = new Uint8Array(512);
+    //this.permMod12 = new Uint8Array(512);
     for (var i = 0; i < 256; i++) {
-        this.p[i] = random() * 256;
+        this.perm[i] = this.perm[i + 256] = random() * 256;
     }
+    /*
     for (i = 0; i < 512; i++) {
         this.perm[i] = this.p[i & 255];
         this.permMod12[i] = this.perm[i] % 12;
     }
+    */
 
 }
+
+
 SimplexNoise.prototype = {
-    grad3: new Float32Array([1, 1, 0,
-                            - 1, 1, 0,
-                            1, - 1, 0,
+    // http://mrl.nyu.edu/~perlin/paper445.pdf
+    // padding the front of grad3 with (1,1,0),(-1,1,0),(0,-1,1) and (0,-1,-1)
+    // (for comprehension only) for two reasons:
+    // 1. as described in Perlin's followup paper this eliminates modulo 12 operation
+    // 2. padding the front as opposed to the end provides a (slightly) simplier
+    // logical structure for factoring out gradient lookups
+    /*
+    grad3: new Float32Array([
+                             1,  1,  0,
+                            -1,  1,  0,
+                             0, -1,  1,
+                             0, -1, -1,
+                            
+                             1,  1,  0,
+                            -1,  1,  0,
+                             1, -1,  0,
 
-                            - 1, - 1, 0,
-                            1, 0, 1,
-                            - 1, 0, 1,
+                            -1, -1,  0,
+                             1,  0,  1,
+                            -1,  0,  1,
 
-                            1, 0, - 1,
-                            - 1, 0, - 1,
-                            0, 1, 1,
+                             1,  0, -1,
+                            -1,  0, -1,
+                             0,  1,  1,
 
-                            0, - 1, 1,
-                            0, 1, - 1,
-                            0, - 1, - 1]),
-    grad4: new Float32Array([0, 1, 1, 1, 0, 1, 1, - 1, 0, 1, - 1, 1, 0, 1, - 1, - 1,
-                            0, - 1, 1, 1, 0, - 1, 1, - 1, 0, - 1, - 1, 1, 0, - 1, - 1, - 1,
-                            1, 0, 1, 1, 1, 0, 1, - 1, 1, 0, - 1, 1, 1, 0, - 1, - 1,
-                            - 1, 0, 1, 1, - 1, 0, 1, - 1, - 1, 0, - 1, 1, - 1, 0, - 1, - 1,
-                            1, 1, 0, 1, 1, 1, 0, - 1, 1, - 1, 0, 1, 1, - 1, 0, - 1,
-                            - 1, 1, 0, 1, - 1, 1, 0, - 1, - 1, - 1, 0, 1, - 1, - 1, 0, - 1,
-                            1, 1, 1, 0, 1, 1, - 1, 0, 1, - 1, 1, 0, 1, - 1, - 1, 0,
-                            - 1, 1, 1, 0, - 1, 1, - 1, 0, - 1, - 1, 1, 0, - 1, - 1, - 1, 0]),
+                             0, -1,  1,
+                             0,  1, -1,
+                             0, -1, -1
+    ]),
+    grad4: new Float32Array([
+                             0,  1,  1,  1,
+                             0,  1,  1, -1,
+                             0,  1, -1,  1,
+                             0,  1, -1, -1,
+                             0, -1,  1,  1,
+                             0, -1,  1, -1,
+                             0, -1, -1,  1,
+                             0, -1, -1, -1,
+                             1,  0,  1,  1,
+                             1,  0,  1, -1,
+                             1,  0, -1,  1,
+                             1,  0, -1, -1,
+                            -1,  0,  1,  1,
+                            -1,  0,  1, -1,
+                            -1,  0, -1,  1,
+                            -1,  0, -1, -1,
+                             1,  1,  0,  1,
+                             1,  1,  0, -1,
+                             1, -1,  0,  1,
+                             1, -1,  0, -1,
+                            -1,  1,  0,  1,
+                            -1,  1,  0, -1,
+                            -1, -1,  0,  1,
+                            -1, -1,  0, -1,
+                             1,  1,  1,  0,
+                             1,  1, -1,  0,
+                             1, -1,  1,  0,
+                             1, -1, -1,  0,
+                            -1,  1,  1,  0,
+                            -1,  1, -1,  0,
+                            -1, -1,  1,  0,
+                            -1, -1, -1,  0
+    ]),
+    */
     noise2D: function (xin, yin) {
-        var permMod12 = this.permMod12,
-            perm = this.perm,
-            grad3 = this.grad3;
+        var //permMod12 = this.permMod12,
+            perm = this.perm;
+            //grad3 = this.grad3;
         var n0=0, n1=0, n2=0; // Noise contributions from the three corners
         // Skew the input space to determine which simplex cell we're in
         var s = (xin + yin) * F2; // Hairy factor for 2D
@@ -108,29 +160,54 @@ SimplexNoise.prototype = {
         // c = (3-sqrt(3))/6
         var x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
         var y1 = y0 - j1 + G2;
-        var x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
-        var y2 = y0 - 1.0 + 2.0 * G2;
+        var x2 = x0 - 1.0 + G2_2;//2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
+        var y2 = y0 - 1.0 + G2_2;//2.0 * G2;
         // Work out the hashed gradient indices of the three simplex corners
         var ii = i & 255;
         var jj = j & 255;
         // Calculate the contribution from the three corners
         var t0 = 0.5 - x0 * x0 - y0 * y0;
+        var gi, lt12, gt7, posEvenPairs, posEven, gx, gy;
         if (t0 >= 0) {
-            var gi0 = permMod12[ii + perm[jj]] * 3;
+            //var gi0 = permMod12[ii + perm[jj]] * 3;
+            gi = perm[ii + perm[jj]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x0 : -x0;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y0 : -y0;
             t0 *= t0;
-            n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0); // (x,y) of grad3 used for 2D gradient
+            //n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0); // (x,y) of grad3 used for 2D gradient
+            n0 = t0 * t0 * (gx + gy);
         }
         var t1 = 0.5 - x1 * x1 - y1 * y1;
         if (t1 >= 0) {
-            var gi1 = permMod12[ii + i1 + perm[jj + j1]] * 3;
+            //var gi1 = permMod12[ii + i1 + perm[jj + j1]] * 3;
+            gi = perm[ii + i1 + perm[jj + j1]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x1 : -x1;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y1 : -y1;
             t1 *= t1;
-            n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1);
+            //n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1);
+            n1 = t1 * t1 * (gx + gy);
         }
         var t2 = 0.5 - x2 * x2 - y2 * y2;
         if (t2 >= 0) {
-            var gi2 = permMod12[ii + 1 + perm[jj + 1]] * 3;
+            //var gi2 = permMod12[ii + 1 + perm[jj + 1]] * 3;
+            gi = perm[ii + 1 + perm[jj + 1]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x2 : -x2;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y2 : -y2;
             t2 *= t2;
-            n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2);
+            //n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2);
+            n2 = t2 * t2 * (gx + gy);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to return values in the interval [-1,1].
@@ -138,9 +215,9 @@ SimplexNoise.prototype = {
     },
     // 3D simplex noise
     noise3D: function (xin, yin, zin) {
-        var permMod12 = this.permMod12,
-            perm = this.perm,
-            grad3 = this.grad3;
+        var //permMod12 = this.permMod12,
+            perm = this.perm;
+            //grad3 = this.grad3;
         var n0, n1, n2, n3; // Noise contributions from the four corners
         // Skew the input space to determine which simplex cell we're in
         var s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
@@ -217,44 +294,84 @@ SimplexNoise.prototype = {
         var x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
         var y1 = y0 - j1 + G3;
         var z1 = z0 - k1 + G3;
-        var x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x,y,z) coords
-        var y2 = y0 - j2 + 2.0 * G3;
-        var z2 = z0 - k2 + 2.0 * G3;
-        var x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x,y,z) coords
-        var y3 = y0 - 1.0 + 3.0 * G3;
-        var z3 = z0 - 1.0 + 3.0 * G3;
+        var x2 = x0 - i2 + G3_2;//2.0 * G3; // Offsets for third corner in (x,y,z) coords
+        var y2 = y0 - j2 + G3_2;//2.0 * G3;
+        var z2 = z0 - k2 + G3_2;//2.0 * G3;
+        var x3 = x0 - 1.0 + G3_3;//3.0 * G3; // Offsets for last corner in (x,y,z) coords
+        var y3 = y0 - 1.0 + G3_3;//3.0 * G3;
+        var z3 = z0 - 1.0 + G3_3;//3.0 * G3;
         // Work out the hashed gradient indices of the four simplex corners
         var ii = i & 255;
         var jj = j & 255;
         var kk = k & 255;
         // Calculate the contribution from the four corners
-        var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+        
+        // Corrections provided by Gustavson
+        // http://webstaff.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
+        var t0 = 0.5 - x0 * x0 - y0 * y0 - z0 * z0;
+        var gi, lt12, gt7, posEvenPairs, posEven, gx, gy, gz;
         if (t0 < 0) n0 = 0.0;
         else {
-            var gi0 = permMod12[ii + perm[jj + perm[kk]]] * 3;
+            //var gi0 = permMod12[ii + perm[jj + perm[kk]]] * 3;
+            gi = perm[ii + perm[jj + perm[kk]]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x0 : -x0;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y0 : -y0;
+            gz = gt7 && posEvenPairs || 2===gi ? z0 : gt7 && !posEvenPairs || 3===gi ? -z0 : 0;
             t0 *= t0;
-            n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0 + grad3[gi0 + 2] * z0);
+            //n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0 + grad3[gi0 + 2] * z0);
+            n0 = t0 * t0 * (gx + gy + gz);
         }
-        var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+        var t1 = 0.5 - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 < 0) n1 = 0.0;
         else {
-            var gi1 = permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]] * 3;
+            //var gi1 = permMod12[ii + i1 + perm[jj + j1 + perm[kk + k1]]] * 3;
+            gi = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x1 : -x1;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y1 : -y1;
+            gz = gt7 && posEvenPairs || 2===gi ? z1 : gt7 && !posEvenPairs || 3===gi ? -z1 : 0;
             t1 *= t1;
-            n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1 + grad3[gi1 + 2] * z1);
+            //n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1 + grad3[gi1 + 2] * z1);
+            n1 = t1 * t1 * (gx + gy + gz);
         }
-        var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+        var t2 = 0.5 - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 < 0) n2 = 0.0;
         else {
-            var gi2 = permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]] * 3;
+            //var gi2 = permMod12[ii + i2 + perm[jj + j2 + perm[kk + k2]]] * 3;
+            gi = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x2 : -x2;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y2 : -y2;
+            gz = gt7 && posEvenPairs || 2===gi ? z2 : gt7 && !posEvenPairs || 3===gi ? -z2 : 0;
             t2 *= t2;
-            n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2 + grad3[gi2 + 2] * z2);
+            //n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2 + grad3[gi2 + 2] * z2);
+            n2 = t2 * t2 * (gx + gy + gz);
         }
-        var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+        var t3 = 0.5 - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 < 0) n3 = 0.0;
         else {
-            var gi3 = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]] * 3;
+            //var gi3 = permMod12[ii + 1 + perm[jj + 1 + perm[kk + 1]]] * 3;
+            gi = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] & 0xf;
+            lt12 = 12>gi;
+            gt7 = 7<gi;
+            posEvenPairs = 0===(gi>>1&1);
+            posEven = 0===(gi&1);
+            gx = !lt12 || 4>gi && 1<gi ? 0 : posEven ? x3 : -x3;
+            gy = lt12 && gt7 ? 0 : gt7 && posEven || lt12 && posEvenPairs ? y3 : -y3;
+            gz = gt7 && posEvenPairs || 2===gi ? z3 : gt7 && !posEvenPairs || 3===gi ? -z3 : 0;
             t3 *= t3;
-            n3 = t3 * t3 * (grad3[gi3] * x3 + grad3[gi3 + 1] * y3 + grad3[gi3 + 2] * z3);
+            //n3 = t3 * t3 * (grad3[gi3] * x3 + grad3[gi3 + 1] * y3 + grad3[gi3 + 2] * z3);
+            n3 = t3 * t3 * (gx + gy + gz);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]
@@ -262,9 +379,9 @@ SimplexNoise.prototype = {
     },
     // 4D simplex noise, better simplex rank ordering method 2012-03-09
     noise4D: function (x, y, z, w) {
-        var permMod12 = this.permMod12,
-            perm = this.perm,
-            grad4 = this.grad4;
+        var //permMod12 = this.permMod12,
+            perm = this.perm;
+            //grad4 = this.grad4;
 
         var n0, n1, n2, n3, n4; // Noise contributions from the five corners
         // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
@@ -330,58 +447,114 @@ SimplexNoise.prototype = {
         var y1 = y0 - j1 + G4;
         var z1 = z0 - k1 + G4;
         var w1 = w0 - l1 + G4;
-        var x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
-        var y2 = y0 - j2 + 2.0 * G4;
-        var z2 = z0 - k2 + 2.0 * G4;
-        var w2 = w0 - l2 + 2.0 * G4;
-        var x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
-        var y3 = y0 - j3 + 3.0 * G4;
-        var z3 = z0 - k3 + 3.0 * G4;
-        var w3 = w0 - l3 + 3.0 * G4;
-        var x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
-        var y4 = y0 - 1.0 + 4.0 * G4;
-        var z4 = z0 - 1.0 + 4.0 * G4;
-        var w4 = w0 - 1.0 + 4.0 * G4;
+        var x2 = x0 - i2 + G4_2;//2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
+        var y2 = y0 - j2 + G4_2;//2.0 * G4;
+        var z2 = z0 - k2 + G4_2;//2.0 * G4;
+        var w2 = w0 - l2 + G4_2;//2.0 * G4;
+        var x3 = x0 - i3 + G4_3;//3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
+        var y3 = y0 - j3 + G4_3;//3.0 * G4;
+        var z3 = z0 - k3 + G4_3;//3.0 * G4;
+        var w3 = w0 - l3 + G4_3;//3.0 * G4;
+        var x4 = x0 - 1.0 + G4_4;//4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
+        var y4 = y0 - 1.0 + G4_4;//4.0 * G4;
+        var z4 = z0 - 1.0 + G4_4;//4.0 * G4;
+        var w4 = w0 - 1.0 + G4_4;//4.0 * G4;
         // Work out the hashed gradient indices of the five simplex corners
         var ii = i & 255;
         var jj = j & 255;
         var kk = k & 255;
         var ll = l & 255;
         // Calculate the contribution from the five corners
-        var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        var t0 = 0.5 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        var gi, lt24, lt16, lt8, posEven, posEvenPairs, gx, gy, gz, gw;
         if (t0 < 0) n0 = 0.0;
         else {
-            var gi0 = (perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32) * 4;
+            //var gi0 = (perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32) * 4;
+            gi = perm[ii + perm[jj + perm[kk + perm[ll]]]] & 0x1f;
+            lt24 = 24>gi;
+            lt16 = 16>gi;
+            lt8 = 8>gi;
+            posEven = 0===(gi&1);
+            posEvenPairs = 0===(gi>>1&1);
+            gx = lt8 ? 0 : 0===(gi>>2&1) ? x0 : -x0;
+            gy = 4>gi ? y0 : lt8 ? -y0 : lt16 ? 0 : posEvenPairs ? y0 : -y0;
+            gz = lt24 && !lt16 ? 0 : lt16 && posEvenPairs || !lt24 && posEven ? z0 : -z0;
+            gw = !lt24 ? 0 : posEven ? w0 : -w0;
             t0 *= t0;
-            n0 = t0 * t0 * (grad4[gi0] * x0 + grad4[gi0 + 1] * y0 + grad4[gi0 + 2] * z0 + grad4[gi0 + 3] * w0);
+            //n0 = t0 * t0 * (grad4[gi0] * x0 + grad4[gi0 + 1] * y0 + grad4[gi0 + 2] * z0 + grad4[gi0 + 3] * w0);
+            n0 = t0 * t0 * (gx + gy + gz + gw);
         }
-        var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        var t1 = 0.5 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t1 < 0) n1 = 0.0;
         else {
-            var gi1 = (perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32) * 4;
+            //var gi1 = (perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32) * 4;
+            gi = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] & 0x1f;
+            lt24 = 24>gi;
+            lt16 = 16>gi;
+            lt8 = 8>gi;
+            posEven = 0===(gi&1);
+            posEvenPairs = 0===(gi>>1&1);
+            gx = lt8 ? 0 : 0===(gi>>2&1) ? x1 : -x1;
+            gy = 4>gi ? y1 : lt8 ? -y1 : lt16 ? 0 : posEvenPairs ? y1 : -y1;
+            gz = lt24 && !lt16 ? 0 : lt16 && posEvenPairs || !lt24 && posEven ? z1 : -z1;
+            gw = !lt24 ? 0 : posEven ? w1 : -w1;
             t1 *= t1;
-            n1 = t1 * t1 * (grad4[gi1] * x1 + grad4[gi1 + 1] * y1 + grad4[gi1 + 2] * z1 + grad4[gi1 + 3] * w1);
+            //n1 = t1 * t1 * (grad4[gi1] * x1 + grad4[gi1 + 1] * y1 + grad4[gi1 + 2] * z1 + grad4[gi1 + 3] * w1);
+            n1 = t1 * t1 * (gx + gy + gz + gw);
         }
-        var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        var t2 = 0.5 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t2 < 0) n2 = 0.0;
         else {
-            var gi2 = (perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32) * 4;
+            //var gi2 = (perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32) * 4;
+            gi = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] & 0x1f;
+            lt24 = 24>gi;
+            lt16 = 16>gi;
+            lt8 = 8>gi;
+            posEven = 0===(gi&1);
+            posEvenPairs = 0===(gi>>1&1);
+            gx = lt8 ? 0 : 0===(gi>>2&1) ? x2 : -x2;
+            gy = 4>gi ? y2 : lt8 ? -y2 : lt16 ? 0 : posEvenPairs ? y2 : -y2;
+            gz = lt24 && !lt16 ? 0 : lt16 && posEvenPairs || !lt24 && posEven ? z2 : -z2;
+            gw = !lt24 ? 0 : posEven ? w2 : -w2;
             t2 *= t2;
-            n2 = t2 * t2 * (grad4[gi2] * x2 + grad4[gi2 + 1] * y2 + grad4[gi2 + 2] * z2 + grad4[gi2 + 3] * w2);
+            //n2 = t2 * t2 * (grad4[gi2] * x2 + grad4[gi2 + 1] * y2 + grad4[gi2 + 2] * z2 + grad4[gi2 + 3] * w2);
+            n2 = t2 * t2 * (gx + gy + gz + gw);
         }
-        var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        var t3 = 0.5 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t3 < 0) n3 = 0.0;
         else {
-            var gi3 = (perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32) * 4;
+            //var gi3 = (perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32) * 4;
+            gi = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] & 0x1f;
+            lt24 = 24>gi;
+            lt16 = 16>gi;
+            lt8 = 8>gi;
+            posEven = 0===(gi&1);
+            posEvenPairs = 0===(gi>>1&1);
+            gx = lt8 ? 0 : 0===(gi>>2&1) ? x3 : -x3;
+            gy = 4>gi ? y3 : lt8 ? -y3 : lt16 ? 0 : posEvenPairs ? y3 : -y3;
+            gz = lt24 && !lt16 ? 0 : lt16 && posEvenPairs || !lt24 && posEven ? z3 : -z3;
+            gw = !lt24 ? 0 : posEven ? w3 : -w3;
             t3 *= t3;
-            n3 = t3 * t3 * (grad4[gi3] * x3 + grad4[gi3 + 1] * y3 + grad4[gi3 + 2] * z3 + grad4[gi3 + 3] * w3);
+            //n3 = t3 * t3 * (grad4[gi3] * x3 + grad4[gi3 + 1] * y3 + grad4[gi3 + 2] * z3 + grad4[gi3 + 3] * w3);
+            n3 = t3 * t3 * (gx + gy + gz + gw);
         }
-        var t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        var t4 = 0.5 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t4 < 0) n4 = 0.0;
         else {
-            var gi4 = (perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32) * 4;
+            //var gi4 = (perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32) * 4;
+            gi = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] & 0x1f;
+            lt24 = 24>gi;
+            lt16 = 16>gi;
+            lt8 = 8>gi;
+            posEven = 0===(gi&1);
+            posEvenPairs = 0===(gi>>1&1);
+            gx = lt8 ? 0 : 0===(gi>>2&1) ? x4 : -x4;
+            gy = 4>gi ? y4 : lt8 ? -y4 : lt16 ? 0 : posEvenPairs ? y4 : -y4;
+            gz = lt24 && !lt16 ? 0 : lt16 && posEvenPairs || !lt24 && posEven ? z4 : -z4;
+            gw = !lt24 ? 0 : posEven ? w4 : -w4;
             t4 *= t4;
-            n4 = t4 * t4 * (grad4[gi4] * x4 + grad4[gi4 + 1] * y4 + grad4[gi4 + 2] * z4 + grad4[gi4 + 3] * w4);
+            //n4 = t4 * t4 * (grad4[gi4] * x4 + grad4[gi4 + 1] * y4 + grad4[gi4 + 2] * z4 + grad4[gi4 + 3] * w4);
+            n4 = t4 * t4 * (gx + gy + gz + gw);
         }
         // Sum up and scale the result to cover the range [-1,1]
         return 27.0 * (n0 + n1 + n2 + n3 + n4);
