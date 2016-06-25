@@ -1,4 +1,5 @@
 # simplex-noise.js
+[![Build Status](https://travis-ci.org/jwagner/simplex-noise.svg?branch=master)](https://travis-ci.org/jwagner/simplex-noise)
 
 simplex-noise.js is a fast simplex noise implementation in Javascript. It works in the browser and on nodejs.
 
