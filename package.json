@@ -8,8 +8,7 @@
 
   "devDependencies": {
     "buster": "~0.7.8",
-    "benchmark": "~2.1.0",
-    "microtime": "~2.0.0"
+    "benchmark": "~2.1.0"
   },
   "bugs": {
       "url": "https://github.com/jwagner/simplex-noise.js/issues"
