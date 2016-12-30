@@ -1,6 +1,8 @@
 {
     "predef": [
-        "define"
+        "describe",
+        "it",
+        "beforeEach"
     ],
     "browser" : true,
     "node" : true,
