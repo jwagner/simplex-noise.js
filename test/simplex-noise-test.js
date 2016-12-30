@@ -1,14 +1,20 @@
 var SimplexNoise = require('../simplex-noise');
-
+var Alea = require('alea');
 var assert = require('chai').assert;
 
-describe('simplex-noise', function() {
+describe('SimplexNoise', function() {
   function getRandom() {
-    var rnd = 0;
-    return function() {
-      return 1.0 / (rnd++);
-    };
+    return new Alea('seed');
   }
+
+  describe('buildPermutationTable', function() {
+    var table = SimplexNoise._buildPermutationTable(getRandom());
+    var aTable = Array.prototype.slice.call(table);
+    assert.lengthOf(aTable, 256);
+    for (var i = 0; i < aTable.length; i++) {
+      assert.include(aTable, i);
+    }
+  });
 
   describe('constructor', function() {
     it('should initialize with Math.random', function() {
@@ -16,27 +22,23 @@ describe('simplex-noise', function() {
       assert.equal(simplex.perm.length, 512);
       assert.equal(simplex.permMod12.length, 512);
       for (var i = 0; i < 512; i++) {
-        assert(simplex.perm[i] < 256);
-        assert(simplex.perm[i] >= 0);
-        assert(simplex.perm[i] >= 0);
+        assert.isBelow(simplex.perm[i], 256);
+        assert.isAtLeast(simplex.perm[i], 0);
         assert.equal(simplex.perm[i], simplex.perm[i & 255]);
         assert.equal(simplex.permMod12[i], simplex.perm[i] % 12);
       }
     });
 
     it('should initialize with a custom random function', function() {
-      var i = 2;
-      var simplex = new SimplexNoise(function() {
-        return 1.0 / i++;
-      });
+      var simplex = new SimplexNoise(getRandom());
       assert.equal(simplex.perm.length, 512);
       assert.equal(simplex.permMod12.length, 512);
-      assert.equal(simplex.perm[0], 128);
-      assert.equal(simplex.perm[1], 85);
-      assert.equal(simplex.perm[256], 128);
-      assert.equal(simplex.perm[257], 85);
-      assert.equal(simplex.permMod12[0], 128 % 12);
-      assert.equal(simplex.permMod12[1], 85 % 12);
+      for (var i = 0; i < 512; i++) {
+        assert.isBelow(simplex.perm[i], 256);
+        assert.isAtLeast(simplex.perm[i], 0);
+        assert.equal(simplex.perm[i], simplex.perm[i & 255]);
+        assert.equal(simplex.permMod12[i], simplex.perm[i] % 12);
+      }
     });
   });
 

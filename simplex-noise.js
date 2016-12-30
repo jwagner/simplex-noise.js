@@ -41,7 +41,7 @@ var G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
 
 function SimplexNoise(random) {
   if (!random) random = Math.random;
-  this.p = new Uint8Array(256);
+  this.p = buildPermutationTable(random);
   this.perm = new Uint8Array(512);
   this.permMod12 = new Uint8Array(512);
   for (var i = 0; i < 256; i++) {
