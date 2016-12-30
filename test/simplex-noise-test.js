@@ -8,12 +8,13 @@ describe('SimplexNoise', function() {
   }
 
   describe('buildPermutationTable', function() {
-    var table = SimplexNoise._buildPermutationTable(getRandom());
-    var aTable = Array.prototype.slice.call(table);
-    assert.lengthOf(aTable, 256);
-    for (var i = 0; i < aTable.length; i++) {
-      assert.include(aTable, i);
-    }
+    it('contains all indices exactly once', function() {
+      var table = SimplexNoise._buildPermutationTable(getRandom());
+      var aTable = Array.prototype.slice.call(table);
+      for (var i = 0; i < aTable.length; i++) {
+        assert.include(aTable, i);
+      }
+    });
   });
 
   describe('constructor', function() {

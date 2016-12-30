@@ -391,13 +391,15 @@ SimplexNoise.prototype = {
 
 function buildPermutationTable(random) {
   var i;
-  var j = [];
-  for (i = 0; i < 256; i++) {
-    j.push(i);
-  }
   var p = new Uint8Array(256);
   for (i = 0; i < 256; i++) {
-    p[i] = j.splice(~~(random() * (256 - i)), 1);
+    p[i] = i;
+  }
+  for (i = 0; i < 255; i++) {
+    var r = i + 1 + ~~(random() * (255 - i));
+    var aux = p[i];
+    p[i] = p[r];
+    p[r] = aux;
   }
   return p;
 }
