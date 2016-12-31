@@ -74,6 +74,11 @@ make tests
 
 ## Changelog
 
+### 2.3.0
+- Corrected generation of permutation table
+- Moved tests to mocha/chai
+- Cleanup
+
 ### 2.2.0
 - Small performance improvement for 2D noise
 
