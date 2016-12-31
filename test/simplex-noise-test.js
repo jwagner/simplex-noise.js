@@ -15,6 +15,14 @@ describe('SimplexNoise', function() {
         assert.include(aTable, i);
       }
     });
+    it('can contain 0 in the first position', function() {
+      function zero() { return 0; }
+      var table = SimplexNoise._buildPermutationTable(zero);
+      var aTable = Array.prototype.slice.call(table);
+      for (var i = 0; i < aTable.length; i++) {
+        assert.equal(aTable[i], i);
+      }
+    });
   });
 
   describe('constructor', function() {
