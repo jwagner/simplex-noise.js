@@ -76,7 +76,8 @@ make tests
 
 ### 2.3.0
 
-:warning: This release changes the output of the noise functions. :warning:
+:warning: **This release changes the output of the noise functions.** :warning:
+
 In the future such changes will be released as a new major version.
 
 - Corrected generation of permutation table
