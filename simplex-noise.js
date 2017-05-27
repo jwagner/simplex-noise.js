@@ -1,5 +1,5 @@
 /*
- * A fast javascript implementation of simplex noise by Jonas Wagner
+ * A fast javascript implementation of simplex noise by Jonas Wagner, modified by MarissaChan (Marissa Wagner)
  *
  * Based on a speed-improved simplex noise algorithm for 2D, 3D and 4D in Java.
  * Which is based on example code by Stefan Gustavson (stegu@itn.liu.se).
@@ -7,7 +7,7 @@
  * Better rank ordering method by Stefan Gustavson in 2012.
  *
  *
- * Copyright (C) 2016 Jonas Wagner
+ * Copyright (C) 2016 Jonas Wagner, modified by MarissaChan (Marissa Wagner)
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -40,7 +40,7 @@ var F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
 var G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
 
 function SimplexNoise(random) {
-  if (!random) random = Math.random;
+  if (!random) random = Math.random();
   this.p = buildPermutationTable(random);
   this.perm = new Uint8Array(512);
   this.permMod12 = new Uint8Array(512);
@@ -393,7 +393,7 @@ function buildPermutationTable(random) {
     p[i] = i;
   }
   for (i = 0; i < 255; i++) {
-    var r = i + ~~(random() * (256 - i));
+    var r = i + ~~(random * (256 - i));
     var aux = p[i];
     p[i] = p[r];
     p[r] = aux;
