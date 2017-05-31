@@ -393,7 +393,7 @@ function buildPermutationTable(random) {
     p[i] = i;
   }
   for (i = 0; i < 255; i++) {
-    var r = i + ~~(random() * (256 - i));
+    var r = i + ~~( (typeof random === 'function' ? random() : random ) * (256 - i));
     var aux = p[i];
     p[i] = p[r];
     p[r] = aux;
