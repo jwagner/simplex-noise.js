@@ -33,7 +33,7 @@ var simplex = new SimplexNoise(Math.random),
     value2d = simplex.noise2D(x, y);
 ```
 
-This can be used with a PRNG like alea to initialize the noise function with a seed:
+This can be used with a pseudo random number generator like alea to initialize the noise function with a **seed**:
 
 ```javascript
 var random = new Alea(seed),
@@ -41,7 +41,7 @@ var random = new Alea(seed),
     value2d = simplex.noise2D(x, y);
 ```
 
-The ALEA PRNG can be found on [npm](https://npmjs.org/package/alea).
+The ALEA PRNG can be found on in the npm package [alea](https://npmjs.org/package/alea).
 
 ## node.js
 
