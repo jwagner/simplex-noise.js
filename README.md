@@ -106,3 +106,5 @@ Copyright (c) 2015 Jonas Wagner, licensed under the MIT License (enclosed)
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
 by Stefan Gustavson and Peter Eastman.
+
+The typescript definition has been provided by [Neonit](https://github.com/Neonit).
