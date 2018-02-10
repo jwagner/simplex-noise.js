@@ -3,16 +3,11 @@
 
 simplex-noise.js is a fast simplex noise implementation in Javascript. It works in the browser and on nodejs.
 
-## Requirements
-
-It requires typed arrays, if you want to use it in browsers without support
-you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
-
 ## Demos
 
-- Simple 2D plasma demo on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
-- A more complex [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example.
-- Real world usage for creating film grain in my [analog film emulator](http://29a.ch/film-emulator/).
+- Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
+- [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example.
+- Film grain in [analog film emulator](http://29a.ch/film-emulator/).
 
 ## Usage
 
@@ -107,6 +102,13 @@ In the future such changes will be released as a new major version.
 
 ### 1.0.0
 - Initial Release
+
+
+## Requirements
+
+It requires typed arrays. If you want to use it in browsers without support
+you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
+
 
 ## License
 Copyright (c) 2015 Jonas Wagner, licensed under the MIT License (enclosed)
