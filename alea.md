@@ -1,6 +1,3 @@
-The ALEA PRNG code used by simplex-noise.js is based on code by Johannes Baagøe,
-modified by Jonas Wagner.
-
 Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

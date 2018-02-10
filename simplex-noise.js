@@ -6,7 +6,6 @@ Which is based on example code by Stefan Gustavson (stegu@itn.liu.se).
 With Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
 Better rank ordering method by Stefan Gustavson in 2012.
 
-
  Copyright (c) 2018 Jonas Wagner
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -407,8 +406,12 @@ Better rank ordering method by Stefan Gustavson in 2012.
   }
   SimplexNoise._buildPermutationTable = buildPermutationTable;
 
+  /*
+  The ALEA PRNG and masher code used by simplex-noise.js
+  is based on code by Johannes Baagøe, modified by Jonas Wagner.
+  See alea.md for the full license.
+  */
   function alea() {
-    // Johannes Baagøe <baagoe@baagoe.com>, 2010
     var s0 = 0;
     var s1 = 0;
     var s2 = 0;
