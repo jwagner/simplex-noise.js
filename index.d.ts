@@ -9,10 +9,10 @@ declare module 'simplex-noise'
 		/**
 		 * Creates a new `SimplexNoise` instance. You want to use this sparingly, as it is a relatively
 		 * expensive.
-		 * @param {SimplexNoise.RandomNumberGenerator} [random=Math.random] - The random number
+		 * @param {SimplexNoise.RandomNumberGenerator | string} [random=Math.random] - The random number
 		 *     generator to use. This argument could e.g. be used to inject a seeded generator.
 		 */
-		constructor(random?: SimplexNoise.RandomNumberGenerator);
+		constructor(random?: SimplexNoise.RandomNumberGenerator | string);
 
 		/**
 		 * Calculates the noise value in the range [-1;1] for the given point in a 2D space.

@@ -80,6 +80,7 @@ npm install && npm test
 
 ### 2.4.0
 - Included a PRNG based on ALEA to directly allow seeding
+- Included typescript definitions
 
 ### 2.3.0
 
