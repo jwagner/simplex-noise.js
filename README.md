@@ -16,24 +16,31 @@ you will need to use a polyfill like [typedarray.js](http://www.calormen.com/pol
 
 ## Usage
 
+By default simplex-noise.js will use Math.random() to seed the noise.
 ```javascript
-// initializing a simplex instance
-// do this only once it's relatively expensive
+// initializing a new simplex instance
+// do this only once as it is relatively expensive
 var simplex = new SimplexNoise(),
     value2d = simplex.noise2D(x, y),
     value3d = simplex.noise3D(x, y, z),
     value4d = simplex.noise4D(x, y, z, w);
 ```
 
-You can also pass an alternative random function to the constructor that is
-used to build the permutation table:
-
+You can also pass in a seed string which will then be used to initialize
+the noise using the built in alea PRNG.
 ```javascript
-var simplex = new SimplexNoise(Math.random),
-    value2d = simplex.noise2D(x, y);
+var simplex = new SimplexNoise('seed'),
+    value2d = simplex.noise2D(x, y),
+    sameSeed = new SimplexNoise('seed'),
+    differentSeed = new SimplexNoise('different seed');
+
+sameSeed.noise2D(x, y) === value2d
+differentSeed.noise2D(x, y) !== value2d
 ```
 
-This can be used with a pseudo random number generator like alea to initialize the noise function with a **seed**:
+You can also pass an alternative random function to the constructor that is
+used to build the permutation table.
+This can be used with a custom pseudo random number generator:
 
 ```javascript
 var random = new Alea(seed),
@@ -64,15 +71,15 @@ The command works using git stash.
 
 ## Tests
 
-There are some simple buster.js tests for this library to run them first install buster.js and jshint:
+There are some simple unit tests for this library to run them
 ```shell
-npm install buster
-# if you haven't done so already
-npm install -g jshint
-make tests
+npm install && npm test
 ```
 
 ## Changelog
+
+### 2.4.0
+- Included a PRNG based on ALEA to directly allow seeding
 
 ### 2.3.0
 
@@ -106,5 +113,7 @@ Copyright (c) 2015 Jonas Wagner, licensed under the MIT License (enclosed)
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
 by Stefan Gustavson and Peter Eastman.
+
+The integrated pseudo random generator is based on code by by Johannes Baagøe.
 
 The typescript definition has been provided by [Neonit](https://github.com/Neonit).

@@ -55,4 +55,17 @@ visualize('noise3D z1 x20', function(x, y) {
 visualize('noise4D z1 w1 x20', function(x, y) {
   return simplex.noise4D(x / 20, y / 20, 1, 1);
 });
+
+simplex = new SimplexNoise('seed');
+visualize('seed noise2D', function(x, y) {
+  return simplex.noise2D(x / 20, y / 20);
+});
+simplex = new SimplexNoise('seed');
+visualize('same seed noise2D', function(x, y) {
+  return simplex.noise2D(x / 20, y / 20);
+});
+simplex = new SimplexNoise('different seed');
+visualize('different seed noise2D', function(x, y) {
+  return simplex.noise2D(x / 20, y / 20);
+});
 </script>

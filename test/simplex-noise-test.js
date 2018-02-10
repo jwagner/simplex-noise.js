@@ -26,8 +26,7 @@ describe('SimplexNoise', function() {
   });
 
   describe('constructor', function() {
-    it('should initialize with Math.random', function() {
-      var simplex = new SimplexNoise();
+    function checkPermutationTable(simplex) {
       assert.equal(simplex.perm.length, 512);
       assert.equal(simplex.permMod12.length, 512);
       for (var i = 0; i < 512; i++) {
@@ -36,18 +35,35 @@ describe('SimplexNoise', function() {
         assert.equal(simplex.perm[i], simplex.perm[i & 255]);
         assert.equal(simplex.permMod12[i], simplex.perm[i] % 12);
       }
+    }
+
+    it('should initialize with Math.random', function() {
+      var simplex = new SimplexNoise();
+      checkPermutationTable(simplex);
     });
 
     it('should initialize with a custom random function', function() {
       var simplex = new SimplexNoise(getRandom());
-      assert.equal(simplex.perm.length, 512);
-      assert.equal(simplex.permMod12.length, 512);
-      for (var i = 0; i < 512; i++) {
-        assert.isBelow(simplex.perm[i], 256);
-        assert.isAtLeast(simplex.perm[i], 0);
-        assert.equal(simplex.perm[i], simplex.perm[i & 255]);
-        assert.equal(simplex.permMod12[i], simplex.perm[i] % 12);
-      }
+      checkPermutationTable(simplex);
+    });
+
+    it('should initialize with seed', function() {
+      var simplex = new SimplexNoise('seed');
+      checkPermutationTable(simplex);
+    });
+
+    it('should initialize consistently when using the same seed', function() {
+      var a = new SimplexNoise('seed');
+      var b = new SimplexNoise('seed');
+      assert.deepEqual(a, b);
+      assert.equal(a.noise2D(1, 1), b.noise2D(1, 1));
+    });
+
+    it('should initialize differently when using a different seed', function() {
+      var a = new SimplexNoise('seed');
+      var b = new SimplexNoise('different seed');
+      assert.notDeepEqual(a, b);
+      assert.notEqual(a.noise2D(1, 1), b.noise2D(1, 1));
     });
   });
 
