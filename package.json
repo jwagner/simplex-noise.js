@@ -16,7 +16,6 @@
     "eslint-plugin-node": "^6.0.0",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "jshint": "^2.9.5",
     "mocha": "^5.0.0"
   },
   "bugs": {
@@ -38,7 +37,7 @@
     "url": "https://github.com/jwagner/simplex-noise.js.git"
   },
   "scripts": {
-    "test": "eslint simplex-noise.js && jshint simplex-noise.js && mocha",
+    "test": "eslint simplex-noise.js && mocha",
     "benchmark": "node ./perf/benchmark.js"
   }
 }
