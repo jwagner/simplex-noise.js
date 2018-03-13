@@ -1,6 +1,6 @@
 {
   "name": "simplex-noise",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",

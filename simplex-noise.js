@@ -29,6 +29,56 @@ Better rank ordering method by Stefan Gustavson in 2012.
 (function() {
   'use strict';
 
+  var grad3 = new Float32Array([
+    1, 1, 0,
+    -1, 1, 0,
+    1, -1, 0,
+    -1, -1, 0,
+    1, 0, 1,
+    -1, 0, 1,
+    1, 0, -1,
+    -1, 0, -1,
+    0, 1, 1,
+    0, -1, 1,
+    0, 1, -1,
+    0, -1, -1
+  ]);
+
+  var grad4 = new Float32Array([
+    0, 1, 1, 1,
+    0, 1, 1, -1,
+    0, 1, -1, 1,
+    0, 1, -1, -1,
+    0, -1, 1, 1,
+    0, -1, 1, -1,
+    0, -1, -1, 1,
+    0, -1, -1, -1,
+    1, 0, 1, 1,
+    1, 0, 1, -1,
+    1, 0, -1, 1,
+    1, 0, -1, -1,
+    -1, 0, 1, 1,
+    -1, 0, 1, -1,
+    -1, 0, -1, 1,
+    -1, 0, -1, -1,
+    1, 1, 0, 1,
+    1, 1, 0, -1,
+    1, -1, 0, 1,
+    1, -1, 0, -1,
+    -1, 1, 0, 1,
+    -1, 1, 0, -1,
+    -1, -1, 0, 1,
+    -1, -1, 0, -1,
+    1, 1, 1, 0,
+    1, 1, -1, 0,
+    1, -1, 1, 0,
+    1, -1, -1, 0,
+    -1, 1, 1, 0,
+    -1, 1, -1, 0,
+    -1, -1, 1, 0,
+    -1, -1, -1, 0
+  ]);
+
   var F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
   var G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
   var F3 = 1.0 / 3.0;
@@ -36,65 +86,41 @@ Better rank ordering method by Stefan Gustavson in 2012.
   var F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
   var G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
 
-  function SimplexNoise(randomOrSeed) {
-    var random;
-    if (typeof randomOrSeed == 'function') {
-      random = randomOrSeed;
-    }
-    else if (randomOrSeed) {
-      random = alea(randomOrSeed);
-    } else {
-      random = Math.random;
-    }
-    this.p = buildPermutationTable(random);
-    this.perm = new Uint8Array(512);
-    this.permMod12 = new Uint8Array(512);
+  function simplex(random) {
+    var p = buildPermutationTable(random);
+    var perm = new Uint8Array(512);
+    var permMod12 = new Uint8Array(512);
     for (var i = 0; i < 512; i++) {
-      this.perm[i] = this.p[i & 255];
-      this.permMod12[i] = this.perm[i] % 12;
+      perm[i] = p[i & 255];
+      permMod12[i] = perm[i] % 12;
     }
 
-  }
-  SimplexNoise.prototype = {
-    grad3: new Float32Array([1, 1, 0,
-      -1, 1, 0,
-      1, -1, 0,
+    return function noise(x, y, z, w) {
+      switch (arguments.length) {
+        case 1: return noise1D(x);
+        case 2: return noise2D(x, y);
+        case 3: return noise3D(x, y, z);
+        case 4: return noise4D(x, y, z, w);
+      }
+    };
 
-      -1, -1, 0,
-      1, 0, 1,
-      -1, 0, 1,
+    function noise1D(x) {
+      return noise2D(x, 1);
+    }
 
-      1, 0, -1,
-      -1, 0, -1,
-      0, 1, 1,
-
-      0, -1, 1,
-      0, 1, -1,
-      0, -1, -1]),
-    grad4: new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1,
-      0, -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1,
-      1, 0, 1, 1, 1, 0, 1, -1, 1, 0, -1, 1, 1, 0, -1, -1,
-      -1, 0, 1, 1, -1, 0, 1, -1, -1, 0, -1, 1, -1, 0, -1, -1,
-      1, 1, 0, 1, 1, 1, 0, -1, 1, -1, 0, 1, 1, -1, 0, -1,
-      -1, 1, 0, 1, -1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, -1,
-      1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
-      -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]),
-    noise2D: function(xin, yin) {
-      var permMod12 = this.permMod12;
-      var perm = this.perm;
-      var grad3 = this.grad3;
+    function noise2D(x, y) {
       var n0 = 0; // Noise contributions from the three corners
       var n1 = 0;
       var n2 = 0;
       // Skew the input space to determine which simplex cell we're in
-      var s = (xin + yin) * F2; // Hairy factor for 2D
-      var i = Math.floor(xin + s);
-      var j = Math.floor(yin + s);
+      var s = (x + y) * F2; // Hairy factor for 2D
+      var i = Math.floor(x + s);
+      var j = Math.floor(y + s);
       var t = (i + j) * G2;
       var X0 = i - t; // Unskew the cell origin back to (x,y) space
       var Y0 = j - t;
-      var x0 = xin - X0; // The x,y distances from the cell origin
-      var y0 = yin - Y0;
+      var x0 = x - X0; // The x,y distances from the cell origin
+      var y0 = y - Y0;
       // For the 2D case, the simplex shape is an equilateral triangle.
       // Determine which simplex we are in.
       var i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
@@ -138,25 +164,22 @@ Better rank ordering method by Stefan Gustavson in 2012.
       // Add contributions from each corner to get the final noise value.
       // The result is scaled to return values in the interval [-1,1].
       return 70.0 * (n0 + n1 + n2);
-    },
-    // 3D simplex noise
-    noise3D: function(xin, yin, zin) {
-      var permMod12 = this.permMod12;
-      var perm = this.perm;
-      var grad3 = this.grad3;
+    }
+
+    function noise3D(x, y, z) {
       var n0, n1, n2, n3; // Noise contributions from the four corners
       // Skew the input space to determine which simplex cell we're in
-      var s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
-      var i = Math.floor(xin + s);
-      var j = Math.floor(yin + s);
-      var k = Math.floor(zin + s);
+      var s = (x + y + z) * F3; // Very nice and simple skew factor for 3D
+      var i = Math.floor(x + s);
+      var j = Math.floor(y + s);
+      var k = Math.floor(z + s);
       var t = (i + j + k) * G3;
       var X0 = i - t; // Unskew the cell origin back to (x,y,z) space
       var Y0 = j - t;
       var Z0 = k - t;
-      var x0 = xin - X0; // The x,y,z distances from the cell origin
-      var y0 = yin - Y0;
-      var z0 = zin - Z0;
+      var x0 = x - X0; // The x,y,z distances from the cell origin
+      var y0 = y - Y0;
+      var z0 = z - Z0;
       // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
       // Determine which simplex we are in.
       var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
@@ -262,12 +285,9 @@ Better rank ordering method by Stefan Gustavson in 2012.
       // Add contributions from each corner to get the final noise value.
       // The result is scaled to stay just inside [-1,1]
       return 32.0 * (n0 + n1 + n2 + n3);
-    },
-    // 4D simplex noise, better simplex rank ordering method 2012-03-09
-    noise4D: function(x, y, z, w) {
-      var perm = this.perm;
-      var grad4 = this.grad4;
+    }
 
+    function noise4D(x, y, z, w) {
       var n0, n1, n2, n3, n4; // Noise contributions from the five corners
       // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
       var s = (x + y + z + w) * F4; // Factor for 4D skewing
@@ -388,7 +408,7 @@ Better rank ordering method by Stefan Gustavson in 2012.
       // Sum up and scale the result to cover the range [-1,1]
       return 27.0 * (n0 + n1 + n2 + n3 + n4);
     }
-  };
+  }
 
   function buildPermutationTable(random) {
     var i;
@@ -404,73 +424,15 @@ Better rank ordering method by Stefan Gustavson in 2012.
     }
     return p;
   }
-  SimplexNoise._buildPermutationTable = buildPermutationTable;
 
-  /*
-  The ALEA PRNG and masher code used by simplex-noise.js
-  is based on code by Johannes Baagøe, modified by Jonas Wagner.
-  See alea.md for the full license.
-  */
-  function alea() {
-    var s0 = 0;
-    var s1 = 0;
-    var s2 = 0;
-    var c = 1;
-
-    var mash = masher();
-    s0 = mash(' ');
-    s1 = mash(' ');
-    s2 = mash(' ');
-
-    for (var i = 0; i < arguments.length; i++) {
-      s0 -= mash(arguments[i]);
-      if (s0 < 0) {
-        s0 += 1;
-      }
-      s1 -= mash(arguments[i]);
-      if (s1 < 0) {
-        s1 += 1;
-      }
-      s2 -= mash(arguments[i]);
-      if (s2 < 0) {
-        s2 += 1;
-      }
-    }
-    mash = null;
-    return function() {
-      var t = 2091639 * s0 + c * 2.3283064365386963e-10; // 2^-32
-      s0 = s1;
-      s1 = s2;
-      return s2 = t - (c = t | 0);
-    };
+  if (typeof define !== 'undefined' && define.amd) {
+    // AMD
+    define(function () { return simplex; });
+  } else if (typeof exports !== 'undefined') {
+    // CommonJS (Node, Browserify)
+    module.exports = simplex;
+  } else if (typeof window !== 'undefined') {
+    // Browser
+    window.simplex = simplex;
   }
-  function masher() {
-    var n = 0xefc8249d;
-    return function(data) {
-      data = data.toString();
-      for (var i = 0; i < data.length; i++) {
-        n += data.charCodeAt(i);
-        var h = 0.02519603282416938 * n;
-        n = h >>> 0;
-        h -= n;
-        h *= n;
-        n = h >>> 0;
-        h -= n;
-        n += h * 0x100000000; // 2^32
-      }
-      return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
-    };
-  }
-
-  // amd
-  if (typeof define !== 'undefined' && define.amd) define(function() {return SimplexNoise;});
-  // common js
-  if (typeof exports !== 'undefined') exports.SimplexNoise = SimplexNoise;
-  // browser
-  else if (typeof window !== 'undefined') window.SimplexNoise = SimplexNoise;
-  // nodejs
-  if (typeof module !== 'undefined') {
-    module.exports = SimplexNoise;
-  }
-
 })();
