@@ -3,7 +3,7 @@ var Alea = require('alea');
 var assert = require('chai').assert;
 
 describe('SimplexNoise', function() {
-  describe('factory', function() {
+  describe('initialization function', function() {
     it('should initialize consistently when using the same seed', function() {
       var randomA = new Alea('seed')
       var randomB = new Alea('seed')

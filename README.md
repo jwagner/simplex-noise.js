@@ -20,9 +20,7 @@ var noise = simplex(Math.random),
     value4d = noise(x, y, z, w);
 ```
 
-You can also pass an alternative random function to the constructor that is
-used to build the permutation table.
-This can be used with a custom pseudo random number generator:
+You can also pass an alternative random function to the function that is used to build the permutation table. This can be used with a custom pseudo random number generator:
 
 ```javascript
 var random = new Alea(seed),
