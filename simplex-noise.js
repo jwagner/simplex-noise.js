@@ -30,53 +30,53 @@ Better rank ordering method by Stefan Gustavson in 2012.
   'use strict';
 
   var grad3 = new Float32Array([
-     1,  1,  0,
-    -1,  1,  0,
-     1, -1,  0,
-    -1, -1,  0,
-     1,  0,  1,
-    -1,  0,  1,
-     1,  0, -1,
-    -1,  0, -1,
-     0,  1,  1,
-     0, -1,  1,
-     0,  1, -1,
-     0, -1, -1
+    1, 1, 0,
+    -1, 1, 0,
+    1, -1, 0,
+    -1, -1, 0,
+    1, 0, 1,
+    -1, 0, 1,
+    1, 0, -1,
+    -1, 0, -1,
+    0, 1, 1,
+    0, -1, 1,
+    0, 1, -1,
+    0, -1, -1
   ]);
 
   var grad4 = new Float32Array([
-     0,  1,  1,  1,
-     0,  1,  1, -1,
-     0,  1, -1,  1,
-     0,  1, -1, -1,
-     0, -1,  1,  1,
-     0, -1,  1, -1,
-     0, -1, -1,  1,
-     0, -1, -1, -1,
-     1,  0,  1,  1,
-     1,  0,  1, -1,
-     1,  0, -1,  1,
-     1,  0, -1, -1,
-    -1,  0,  1,  1,
-    -1,  0,  1, -1,
-    -1,  0, -1,  1,
-    -1,  0, -1, -1,
-     1,  1,  0,  1,
-     1,  1,  0, -1,
-     1, -1,  0,  1,
-     1, -1,  0, -1,
-    -1,  1,  0,  1,
-    -1,  1,  0, -1,
-    -1, -1,  0,  1,
-    -1, -1,  0, -1,
-     1,  1,  1,  0,
-     1,  1, -1,  0,
-     1, -1,  1,  0,
-     1, -1, -1,  0,
-    -1,  1,  1,  0,
-    -1,  1, -1,  0,
-    -1, -1,  1,  0,
-    -1, -1, -1,  0
+    0, 1, 1, 1,
+    0, 1, 1, -1,
+    0, 1, -1, 1,
+    0, 1, -1, -1,
+    0, -1, 1, 1,
+    0, -1, 1, -1,
+    0, -1, -1, 1,
+    0, -1, -1, -1,
+    1, 0, 1, 1,
+    1, 0, 1, -1,
+    1, 0, -1, 1,
+    1, 0, -1, -1,
+    -1, 0, 1, 1,
+    -1, 0, 1, -1,
+    -1, 0, -1, 1,
+    -1, 0, -1, -1,
+    1, 1, 0, 1,
+    1, 1, 0, -1,
+    1, -1, 0, 1,
+    1, -1, 0, -1,
+    -1, 1, 0, 1,
+    -1, 1, 0, -1,
+    -1, -1, 0, 1,
+    -1, -1, 0, -1,
+    1, 1, 1, 0,
+    1, 1, -1, 0,
+    1, -1, 1, 0,
+    1, -1, -1, 0,
+    -1, 1, 1, 0,
+    -1, 1, -1, 0,
+    -1, -1, 1, 0,
+    -1, -1, -1, 0
   ]);
 
   var F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
@@ -102,10 +102,10 @@ Better rank ordering method by Stefan Gustavson in 2012.
         case 3: return noise3D(x, y, z);
         case 4: return noise4D(x, y, z, w);
       }
-    }
+    };
 
     function noise1D(x) {
-      return noise2D(x, 0)
+      return noise2D(x, 0);
     }
 
     function noise2D(x, y) {
@@ -169,17 +169,17 @@ Better rank ordering method by Stefan Gustavson in 2012.
     function noise3D(x, y, z) {
       var n0, n1, n2, n3; // Noise contributions from the four corners
       // Skew the input space to determine which simplex cell we're in
-      var s = (x + y + zin) * F3; // Very nice and simple skew factor for 3D
+      var s = (x + y + z) * F3; // Very nice and simple skew factor for 3D
       var i = Math.floor(x + s);
       var j = Math.floor(y + s);
-      var k = Math.floor(zin + s);
+      var k = Math.floor(z + s);
       var t = (i + j + k) * G3;
       var X0 = i - t; // Unskew the cell origin back to (x,y,z) space
       var Y0 = j - t;
       var Z0 = k - t;
       var x0 = x - X0; // The x,y,z distances from the cell origin
       var y0 = y - Y0;
-      var z0 = zin - Z0;
+      var z0 = z - Z0;
       // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
       // Determine which simplex we are in.
       var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
@@ -410,15 +410,29 @@ Better rank ordering method by Stefan Gustavson in 2012.
     }
   }
 
-  // amd
-  if (typeof define !== 'undefined' && define.amd) define(function() {return SimplexNoise;});
-  // common js
-  if (typeof exports !== 'undefined') exports.SimplexNoise = SimplexNoise;
-  // browser
-  else if (typeof window !== 'undefined') window.SimplexNoise = SimplexNoise;
-  // nodejs
-  if (typeof module !== 'undefined') {
-    module.exports = SimplexNoise;
+  function buildPermutationTable(random) {
+    var i;
+    var p = new Uint8Array(256);
+    for (i = 0; i < 256; i++) {
+      p[i] = i;
+    }
+    for (i = 0; i < 255; i++) {
+      var r = i + ~~(random() * (256 - i));
+      var aux = p[i];
+      p[i] = p[r];
+      p[r] = aux;
+    }
+    return p;
   }
 
+  if (typeof define !== 'undefined' && define.amd) {
+    // AMD
+    define(function () { return simplex; });
+  } else if (typeof exports !== 'undefined') {
+    // CommonJS (Node, Browserify)
+    module.exports = simplex;
+  } else if (typeof window !== 'undefined') {
+    // Browser
+    window.simplex = simplex;
+  }
 })();
