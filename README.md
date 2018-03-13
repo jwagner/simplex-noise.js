@@ -11,26 +11,13 @@ simplex-noise.js is a fast simplex noise implementation in Javascript. It works 
 
 ## Usage
 
-By default simplex-noise.js will use Math.random() to seed the noise.
 ```javascript
 // initializing a new simplex instance
 // do this only once as it is relatively expensive
-var simplex = new SimplexNoise(),
-    value2d = simplex.noise2D(x, y),
-    value3d = simplex.noise3D(x, y, z),
-    value4d = simplex.noise4D(x, y, z, w);
-```
-
-You can also pass in a seed string which will then be used to initialize
-the noise using the built in alea PRNG.
-```javascript
-var simplex = new SimplexNoise('seed'),
-    value2d = simplex.noise2D(x, y),
-    sameSeed = new SimplexNoise('seed'),
-    differentSeed = new SimplexNoise('different seed');
-
-sameSeed.noise2D(x, y) === value2d
-differentSeed.noise2D(x, y) !== value2d
+var noise = simplex(Math.random),
+    value2d = noise(x, y),
+    value3d = noise(x, y, z),
+    value4d = noise(x, y, z, w);
 ```
 
 You can also pass an alternative random function to the constructor that is
@@ -39,8 +26,8 @@ This can be used with a custom pseudo random number generator:
 
 ```javascript
 var random = new Alea(seed),
-    simplex = new SimplexNoise(random),
-    value2d = simplex.noise2D(x, y);
+    noise = simplex(random),
+    value = noise(x, y);
 ```
 
 The ALEA PRNG can be found on in the npm package [alea](https://npmjs.org/package/alea).
@@ -50,9 +37,9 @@ The ALEA PRNG can be found on in the npm package [alea](https://npmjs.org/packag
 Node.js is also supported, you can install the package using [npm](https://npmjs.org/package/simplex-noise).
 
 ```javascript
-var SimplexNoise = require('simplex-noise'),
-    simplex = new SimplexNoise(Math.random),
-    value2d = simplex.noise2D(x, y);
+var simplex = require('simplex-noise'),
+    noise = simplex(Math.random),
+    value = noise(x, y);
 ```
 
 ## Benchmarks
