@@ -22,11 +22,33 @@ describe('SimplexNoise', function() {
   });
 
   describe('noise', function() {
-    var noise, noise2;
+    var noise, noiseA, noiseB;
     beforeEach(function() {
-      noise = simplex(new Alea('seed'));
-      noise2 = simplex(new Alea('other seed'))
+      noiseA = simplex(new Alea('seed'));
+      noiseB = simplex(new Alea('other seed'))
+      noise = noiseA
     });
+
+    describe('noise1D', function() {
+      it('should return the same value for the same input', function() {
+        assert.equal(noise(0.1), noise(0.1));
+      });
+      it('should return a different value for a different input', function() {
+        assert.notEqual(noise(0.1), noise(0.101));
+      });
+      it('should return a different output with a different seed', function() {
+        assert.notEqual(noiseA(0.1), noiseB(0.1));
+      });
+      it('should return values between -1 and 1', function() {
+        for (var x = 0; x < 10; x++) {
+          assert(noise(x / 5) >= -1);
+        }
+      });
+      it('should return similar values for similar inputs', function() {
+        assert(Math.abs(noise(0.1) - noise(0.101)) < 0.1);
+      });
+    });
+
     describe('noise2D', function() {
       it('should return the same value for the same input', function() {
         assert.equal(noise(0.1, 0.2), noise(0.1, 0.2));
@@ -35,7 +57,7 @@ describe('SimplexNoise', function() {
         assert.notEqual(noise(0.1, 0.2), noise(0.101, 0.202));
       });
       it('should return a different output with a different seed', function() {
-        assert.notEqual(noise(0.1, 0.2), noise2(0.1, 0.2));
+        assert.notEqual(noiseA(0.1, 0.2), noiseB(0.1, 0.2));
       });
       it('should return values between -1 and 1', function() {
         for (var x = 0; x < 10; x++) {
@@ -59,7 +81,7 @@ describe('SimplexNoise', function() {
         assert.notEqual(noise(0.1, 0.2, 0.3), noise(0.1, 0.2, 0.303));
       });
       it('should return a different output with a different seed', function() {
-        assert.notEqual(noise(0.1, 0.2, 0.3), noise2(0.1, 0.2, 0.3));
+        assert.notEqual(noiseA(0.1, 0.2, 0.3), noiseB(0.1, 0.2, 0.3));
       });
       it('should return values between -1 and 1', function() {
         for (var x = 0; x < 10; x++) {
@@ -83,7 +105,7 @@ describe('SimplexNoise', function() {
         assert.notEqual(noise(0.1, 0.2, 0.3, 0.4), noise(0.1, 0.2, 0.3, 0.404));
       });
       it('should return a different output with a different seed', function() {
-        assert.notEqual(noise(0.1, 0.2, 0.3, 0.4), noise2(0.1, 0.2, 0.3, 0.4));
+        assert.notEqual(noiseA(0.1, 0.2, 0.3, 0.4), noiseB(0.1, 0.2, 0.3, 0.4));
       });
       it('should return values between -1 and 1', function() {
         for (var x = 0; x < 10; x++) {

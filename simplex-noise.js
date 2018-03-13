@@ -105,7 +105,7 @@ Better rank ordering method by Stefan Gustavson in 2012.
     };
 
     function noise1D(x) {
-      return noise2D(x, 0);
+      return noise2D(x, 1);
     }
 
     function noise2D(x, y) {
