@@ -1,17 +1,19 @@
 var Benchmark = this.Benchmark || require('benchmark');
-var SimplexNoise = this.SimplexNoise || require('../simplex-noise');
-var simplex = new SimplexNoise();
+var simplex = this.simplex || require('../simplex-noise');
 
 var suite = new Benchmark.Suite('simplex-noise')
   .add('init', function() {
-    var simplex = new SimplexNoise();
+    var noise = simplex(Math.random);
+  })
+  .add('noise1D', function() {
+    for (var x = 0; x < 8; x++) {
+      noise(x / 8);
+    }
   })
   .add('noise2D', function() {
     for (var x = 0; x < 8; x++) {
       for (var y = 0; y < 8; y++) {
-        for (var z = 0; z < 8; z++) {
-          simplex.noise2D(x / 8, y / 8);
-        }
+        noise(x / 8, y / 8);
       }
     }
   })
@@ -19,7 +21,7 @@ var suite = new Benchmark.Suite('simplex-noise')
     for (var x = 0; x < 8; x++) {
       for (var y = 0; y < 8; y++) {
         for (var z = 0; z < 8; z++) {
-          simplex.noise3D(x / 8, y / 8, z / 8);
+          noise(x / 8, y / 8, z / 8);
         }
       }
     }
@@ -28,7 +30,7 @@ var suite = new Benchmark.Suite('simplex-noise')
     for (var x = 0; x < 8; x++) {
       for (var y = 0; y < 8; y++) {
         for (var z = 0; z < 8; z++) {
-          simplex.noise3D(x / 8, y / 8, z / 8);
+          noise(x / 8, y / 8, z / 8);
         }
       }
     }
@@ -37,7 +39,7 @@ var suite = new Benchmark.Suite('simplex-noise')
     for (var x = 0; x < 8; x++) {
       for (var y = 0; y < 8; y++) {
         for (var z = 0; z < 8; z++) {
-          simplex.noise4D(x / 8, y / 8, z / 8, (x + y) / 16);
+          noise(x / 8, y / 8, z / 8, (x + y) / 16);
         }
       }
     }
