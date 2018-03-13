@@ -61,8 +61,8 @@ npm install && npm test
 ## Changelog
 
 ### 3.0.0
-- Change function signature to `simplex(random)(x[, y, z, w]) -> noise`
-- Add support for 1D noise
+- Changed function signature to `simplex(random)(x[, y, z, w]) -> noise`
+- Added support for 1D noise
 
 ### 2.4.0
 - Included a PRNG based on ALEA to directly allow seeding
