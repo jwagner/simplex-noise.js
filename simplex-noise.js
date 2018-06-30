@@ -88,8 +88,8 @@ Better rank ordering method by Stefan Gustavson in 2012.
       var n2 = 0;
       // Skew the input space to determine which simplex cell we're in
       var s = (xin + yin) * F2; // Hairy factor for 2D
-      var i = Math.floor(xin + s);
-      var j = Math.floor(yin + s);
+      var i = (xin + s) << 0;
+      var j = (yin + s) << 0;
       var t = (i + j) * G2;
       var X0 = i - t; // Unskew the cell origin back to (x,y) space
       var Y0 = j - t;
@@ -147,9 +147,9 @@ Better rank ordering method by Stefan Gustavson in 2012.
       var n0, n1, n2, n3; // Noise contributions from the four corners
       // Skew the input space to determine which simplex cell we're in
       var s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
-      var i = Math.floor(xin + s);
-      var j = Math.floor(yin + s);
-      var k = Math.floor(zin + s);
+      var i = (xin + s) << 0;
+      var j = (yin + s) << 0;
+      var k = (zin + s) << 0;
       var t = (i + j + k) * G3;
       var X0 = i - t; // Unskew the cell origin back to (x,y,z) space
       var Y0 = j - t;
@@ -271,10 +271,10 @@ Better rank ordering method by Stefan Gustavson in 2012.
       var n0, n1, n2, n3, n4; // Noise contributions from the five corners
       // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
       var s = (x + y + z + w) * F4; // Factor for 4D skewing
-      var i = Math.floor(x + s);
-      var j = Math.floor(y + s);
-      var k = Math.floor(z + s);
-      var l = Math.floor(w + s);
+      var i = (x + s) << 0;
+      var j = (y + s) << 0;
+      var k = (z + s) << 0;
+      var l = (w + s) << 0;
       var t = (i + j + k + l) * G4; // Factor for 4D unskewing
       var X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
       var Y0 = j - t;
