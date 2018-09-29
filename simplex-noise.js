@@ -41,7 +41,7 @@ Better rank ordering method by Stefan Gustavson in 2012.
     if (typeof randomOrSeed == 'function') {
       random = randomOrSeed;
     }
-    else if (randomOrSeed) {
+    else if (typeof randomOrSeed !== 'undefined') {
       random = alea(randomOrSeed);
     } else {
       random = Math.random;
