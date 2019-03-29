@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>simplex-noise — esm test</title>
+		<style>
+			html {
+				background: #222;
+				color: #666;
+			}
+		</style>
+		<script defer type="module">
+			import {SimplexNoise} from "./dist-esm/simplex-noise.js"
+			if (!!SimplexNoise)
+				document.body.textContent = "✔️ simplex-noise module loaded"
+		</script>
+	</head>
+	<body></body>
+</html>

@@ -5,11 +5,24 @@
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
   "main": "./simplex-noise",
+  "module": "dist-esm/simplex-noise.js",
+  "scripts": {
+    "prepare": "run-s clean compile-esm test",
+    "start": "http-server",
+    "clean": "rimraf dist-esm",
+    "compile-esm": "babel simplex-noise.js --out-dir dist-esm",
+    "test": "eslint simplex-noise.js && mocha",
+    "benchmark": "node ./perf/benchmark.js"
+  },
   "files": [
+    "dist-esm",
     "simplex-noise.js"
   ],
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
     "alea": "^1.0.0",
+    "babel-plugin-transform-commonjs": "^1.1.5",
     "benchmark": "~2.1.4",
     "chai": "^4.2.0",
     "eslint": "^5.15.3",
@@ -18,7 +31,10 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^6.0.2"
+    "http-server": "^0.11.1",
+    "mocha": "^6.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.3"
   },
   "bugs": {
     "url": "https://github.com/jwagner/simplex-noise.js/issues"
@@ -37,9 +53,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jwagner/simplex-noise.js.git"
-  },
-  "scripts": {
-    "test": "eslint simplex-noise.js && mocha",
-    "benchmark": "node ./perf/benchmark.js"
   }
 }
