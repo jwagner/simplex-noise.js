@@ -3,8 +3,6 @@ sudo: false
 node_js:
   - "node"
   - "8"
-  - "6"
-  - "4"
 addons:
   apt:
     sources:
