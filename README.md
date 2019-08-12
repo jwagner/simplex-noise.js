@@ -9,6 +9,10 @@ simplex-noise.js is a fast simplex noise implementation in Javascript. It works 
 - [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example.
 - Film grain in [analog film emulator](http://29a.ch/film-emulator/).
 
+## Installation
+
+```npm i -S simplex-noise```
+
 ## Usage
 
 By default simplex-noise.js will use Math.random() to seed the noise.
