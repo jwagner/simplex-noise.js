@@ -4,6 +4,10 @@ module.exports = {
         "node": true
     },
     "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
     "globals": {
         "Uint8Array": false,
         "define": false,
