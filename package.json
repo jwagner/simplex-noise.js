@@ -14,7 +14,7 @@
     "dist/simplex-noise.js.map",
     "dist/simplex-noise.mjs",
     "dist/simplex-noise.mjs.map",
-    "dist/index.d.ts"
+    "dist/types.d.ts"
   ],
   "devDependencies": {
     "@parcel/packager-ts": "^2.0.0-rc.0",
@@ -58,9 +58,9 @@
   },
   "scripts": {
     "start": "parcel test/visual.html",
-    "test": "eslint simplex-noise.ts && mocha",
+    "test": "eslint simplex-noise.ts && mocha && ./test/module-compatibility.sh",
     "build": "parcel build",
     "prepare": "npm run-script build",
-    "benchmark": "node ./perf/benchmark.js"
+    "benchmark": "parcel build && node ./perf/benchmark.js"
   }
 }

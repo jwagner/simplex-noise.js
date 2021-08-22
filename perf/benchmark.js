@@ -1,42 +1,42 @@
-var Benchmark = this.Benchmark || require('benchmark');
-var SimplexNoise = this.SimplexNoise || require('../simplex-noise');
-var simplex = new SimplexNoise();
+const Benchmark = this.Benchmark || require('benchmark');
+const SimplexNoise = this.SimplexNoise || require('..');
+const simplex = new SimplexNoise();
 
-var suite = new Benchmark.Suite('simplex-noise')
+new Benchmark.Suite('simplex-noise')
   .add('init', function() {
-    var simplex = new SimplexNoise();
+    new SimplexNoise();
   })
   .add('noise2D', function() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        for (var z = 0; z < 8; z++) {
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        for (let z = 0; z < 8; z++) {
           simplex.noise2D(x / 8, y / 8);
         }
       }
     }
   })
   .add('noise3D', function() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        for (var z = 0; z < 8; z++) {
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        for (let z = 0; z < 8; z++) {
           simplex.noise3D(x / 8, y / 8, z / 8);
         }
       }
     }
   })
   .add('noise3D2', function() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        for (var z = 0; z < 8; z++) {
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        for (let z = 0; z < 8; z++) {
           simplex.noise3D(x / 8, y / 8, z / 8);
         }
       }
     }
   })
   .add('noise4D', function() {
-    for (var x = 0; x < 8; x++) {
-      for (var y = 0; y < 8; y++) {
-        for (var z = 0; z < 8; z++) {
+    for (let x = 0; x < 8; x++) {
+      for (let y = 0; y < 8; y++) {
+        for (let z = 0; z < 8; z++) {
           simplex.noise4D(x / 8, y / 8, z / 8, (x + y) / 16);
         }
       }

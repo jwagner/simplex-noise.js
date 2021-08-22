@@ -464,3 +464,9 @@ function masher() {
     return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
   };
 }
+
+// nasty hack to make the default export stay the same as 2.x
+// when used in commonjs
+if (typeof module !== undefined) {
+  module.exports = SimplexNoise;
+}
