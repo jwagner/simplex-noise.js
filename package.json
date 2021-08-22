@@ -1,15 +1,38 @@
 {
   "name": "simplex-noise",
-  "version": "2.4.0",
+  "version": "3.0.0",
   "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
-  "main": "./simplex-noise",
+  "source": "simplex-noise.ts",
+  "main": "dist/cjs/commonjs-wrapper.js",
+  "module": "dist/esm/simplex-noise.js",
+  "exports": {
+    "require": "./dist/cjs/commonjs-wrapper.js",
+    "import": "./dist/esm/simplex-noise.js"
+  },
   "sideEffects": false,
   "files": [
-    "simplex-noise.js"
+    "dist/esm/package.json",
+    "dist/esm/simplex-noise.js",
+    "dist/esm/simplex-noise.js.map",
+    "dist/esm/simplex-noise.d.ts",
+    "dist/cjs/simplex-noise.js",
+    "dist/cjs/simplex-noise.js.map",
+    "dist/cjs/simplex-noise.d.ts",
+    "dist/cjs/commonjs-wrapper.js",
+    "dist/cjs/commonjs-wrapper.js.map",
+    "dist/cjs/commonjs-wrapper.d.ts"
   ],
   "devDependencies": {
+    "@parcel/packager-ts": "^2.0.0-rc.0",
+    "@parcel/transformer-typescript-types": "^2.0.0-rc.0",
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.7.1",
+    "@types/pngjs": "^6.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
     "alea": "^1.0.0",
     "benchmark": "^2.1.4",
     "chai": "^4.3.4",
@@ -19,7 +42,13 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "mocha": "^9.1.0",
-    "pngjs": "^6.0.0"
+    "parcel": "^2.0.0-rc.0",
+    "pngjs": "^6.0.0",
+    "ts-node": "^10.2.1",
+    "typedoc": "^0.21.6",
+    "typescript": "^4.3.5",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
   },
   "bugs": {
     "url": "https://github.com/jwagner/simplex-noise.js/issues"
@@ -40,7 +69,11 @@
     "url": "https://github.com/jwagner/simplex-noise.js.git"
   },
   "scripts": {
-    "test": "eslint simplex-noise.js && mocha",
-    "benchmark": "node ./perf/benchmark.js"
+    "start": "parcel test/visual.html",
+    "test": "eslint simplex-noise.ts && mocha && ./test/module-compatibility.sh",
+    "build": "./build.sh",
+    "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
+    "prepare": "npm run-script build",
+    "benchmark": "parcel build && node ./perf/benchmark.js"
   }
 }

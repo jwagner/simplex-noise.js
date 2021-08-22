@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es2019",
+    "declaration": true,
+    "strict": true,
+    "outDir": "./dist/esm/",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true
+  },
+  "files": [
+    "simplex-noise.ts"
+  ]
+}

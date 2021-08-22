@@ -1,10 +1,11 @@
-const fs = require('fs');
-const PNG = require('pngjs').PNG;
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+
+import {PNG} from 'pngjs';
 
 const snapshotsPath = 'snapshots';
 
-function assertMatchesImage(actual, imageFilename) {
+export function assertMatchesImage(actual: ImageData, imageFilename: string): void {
   if(!imageFilename.endsWith('.png')) {
     console.log('throwing');
     throw new Error('imageFilename must end in .png');
@@ -29,9 +30,8 @@ function assertMatchesImage(actual, imageFilename) {
   }
   
 }
-exports.assertMatchesImage = assertMatchesImage;
 
-function writeImageSnapshot(actual, imageFilename) {
+function writeImageSnapshot(actual: ImageData, imageFilename: string) {
   const png = new PNG({
     colorType: 0,
     inputColorType: 0,
@@ -49,8 +49,9 @@ function writeImageSnapshot(actual, imageFilename) {
   fs.writeFileSync(path.join(snapshotsPath, imageFilename), PNG.sync.write(png.pack(), {colorType: 0} ));
 }
 
-function sampleFunctionToImageData(f, width, height) {
-  let imageData = {
+type SmampleFunction = (x: number, y:number) => number;
+export function sampleFunctionToImageData(f: SmampleFunction, width: number, height: number): ImageData {
+  const imageData = {
     width,
     height,
     data: new Uint8ClampedArray(width*height)
@@ -62,4 +63,3 @@ function sampleFunctionToImageData(f, width, height) {
   }
   return imageData;
 }
-exports.sampleFunctionToImageData = sampleFunctionToImageData;

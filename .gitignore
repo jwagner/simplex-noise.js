@@ -1,1 +1,5 @@
-node_modules
+/node_modules
+/.parcel-cache
+/dist
+/e2e
+/public

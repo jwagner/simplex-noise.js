@@ -1,0 +1,7 @@
+{
+  "extension": [
+    "ts"
+  ],
+  "spec": "test/simplex-noise-test.ts",
+  "require": "ts-node/register"
+}
