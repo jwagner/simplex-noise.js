@@ -5,6 +5,7 @@
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
   "main": "./simplex-noise",
+  "sideEffects": false,
   "files": [
     "simplex-noise.js"
   ],
