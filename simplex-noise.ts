@@ -35,29 +35,29 @@ const F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
 const G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
 
 const grad3 = new Float32Array([1, 1, 0,
-    -1, 1, 0,
-    1, -1, 0,
+  -1, 1, 0,
+  1, -1, 0,
 
-    -1, -1, 0,
-    1, 0, 1,
-    -1, 0, 1,
+  -1, -1, 0,
+  1, 0, 1,
+  -1, 0, 1,
 
-    1, 0, -1,
-    -1, 0, -1,
-    0, 1, 1,
+  1, 0, -1,
+  -1, 0, -1,
+  0, 1, 1,
 
-    0, -1, 1,
-    0, 1, -1,
-    0, -1, -1]);
+  0, -1, 1,
+  0, 1, -1,
+  0, -1, -1]);
 
-    const grad4 = new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1,
-    0, -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1,
-    1, 0, 1, 1, 1, 0, 1, -1, 1, 0, -1, 1, 1, 0, -1, -1,
-    -1, 0, 1, 1, -1, 0, 1, -1, -1, 0, -1, 1, -1, 0, -1, -1,
-    1, 1, 0, 1, 1, 1, 0, -1, 1, -1, 0, 1, 1, -1, 0, -1,
-    -1, 1, 0, 1, -1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, -1,
-    1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
-    -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0])
+const grad4 = new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1,
+  0, -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1,
+  1, 0, 1, 1, 1, 0, 1, -1, 1, 0, -1, 1, 1, 0, -1, -1,
+  -1, 0, 1, 1, -1, 0, 1, -1, -1, 0, -1, 1, -1, 0, -1, -1,
+  1, 1, 0, 1, 1, 1, 0, -1, 1, -1, 0, 1, 1, -1, 0, -1,
+  -1, 1, 0, 1, -1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, -1,
+  1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
+  -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]);
 
 type RandomFn = () => number;
 
@@ -83,7 +83,7 @@ export default class SimplexNoise {
     }
   }
 
-  noise2D(x: number, y: number) {
+  noise2D(x: number, y: number): number {
     const permMod12 = this.permMod12;
     const perm = this.perm;
     let n0 = 0; // Noise contributions from the three corners
@@ -143,7 +143,7 @@ export default class SimplexNoise {
     return 70.0 * (n0 + n1 + n2);
   }
   // 3D simplex noise
-  noise3D(x:number, y:number, z:number) {
+  noise3D(x:number, y:number, z:number): number {
     const permMod12 = this.permMod12;
     const perm = this.perm;
     let n0, n1, n2, n3; // Noise contributions from the four corners
@@ -266,7 +266,7 @@ export default class SimplexNoise {
     return 32.0 * (n0 + n1 + n2 + n3);
   }
   // 4D simplex noise, better simplex rank ordering method 2012-03-09
-  noise4D(x:number, y:number, z:number, w:number) {
+  noise4D(x:number, y:number, z:number, w:number): number {
     const perm = this.perm;
 
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
@@ -306,28 +306,30 @@ export default class SimplexNoise {
     else rankw++;
     if (z0 > w0) rankz++;
     else rankw++;
-    let i1, j1, k1, l1; // The integer offsets for the second simplex corner
-    let i2, j2, k2, l2; // The integer offsets for the third simplex corner
-    let i3, j3, k3, l3; // The integer offsets for the fourth simplex corner
     // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some order.
     // Many values of c will never occur, since e.g. x>y>z>w makes x<z, y<w and x<w
     // impossible. Only the 24 indices which have non-zero entries make any sense.
     // We use a thresholding to set the coordinates in turn from the largest magnitude.
     // Rank 3 denotes the largest coordinate.
-    i1 = rankx >= 3 ? 1 : 0;
-    j1 = ranky >= 3 ? 1 : 0;
-    k1 = rankz >= 3 ? 1 : 0;
-    l1 = rankw >= 3 ? 1 : 0;
     // Rank 2 denotes the second largest coordinate.
-    i2 = rankx >= 2 ? 1 : 0;
-    j2 = ranky >= 2 ? 1 : 0;
-    k2 = rankz >= 2 ? 1 : 0;
-    l2 = rankw >= 2 ? 1 : 0;
     // Rank 1 denotes the second smallest coordinate.
-    i3 = rankx >= 1 ? 1 : 0;
-    j3 = ranky >= 1 ? 1 : 0;
-    k3 = rankz >= 1 ? 1 : 0;
-    l3 = rankw >= 1 ? 1 : 0;
+
+    // The integer offsets for the second simplex corner
+    const i1 = rankx >= 3 ? 1 : 0;
+    const j1 = ranky >= 3 ? 1 : 0;
+    const k1 = rankz >= 3 ? 1 : 0;
+    const l1 = rankw >= 3 ? 1 : 0;
+    // The integer offsets for the third simplex corner
+    const i2 = rankx >= 2 ? 1 : 0;
+    const j2 = ranky >= 2 ? 1 : 0;
+    const k2 = rankz >= 2 ? 1 : 0;
+    const l2 = rankw >= 2 ? 1 : 0;
+
+    // The integer offsets for the fourth simplex corner
+    const i3 = rankx >= 1 ? 1 : 0;
+    const j3 = ranky >= 1 ? 1 : 0;
+    const k3 = rankz >= 1 ? 1 : 0;
+    const l3 = rankw >= 1 ? 1 : 0;
     // The fifth corner has all coordinate offsets = 1, so no need to compute that.
     const x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
     const y1 = y0 - j1 + G4;
@@ -389,12 +391,12 @@ export default class SimplexNoise {
     // Sum up and scale the result to cover the range [-1,1]
     return 27.0 * (n0 + n1 + n2 + n3 + n4);
   }
-};
+}
 
 /**
  * @private
  */
-export function buildPermutationTable(random: RandomFn) {
+export function buildPermutationTable(random: RandomFn): Uint8Array {
   const p = new Uint8Array(256);
   for (let i = 0; i < 256; i++) {
     p[i] = i;
@@ -419,7 +421,7 @@ function alea(seed: string|number): RandomFn {
   let s2 = 0;
   let c = 1;
 
-  let mash = masher();
+  const mash = masher();
   s0 = mash(' ');
   s1 = mash(' ');
   s2 = mash(' ');

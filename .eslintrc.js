@@ -1,11 +1,16 @@
 module.exports = {
-  'env': {
+  root: true,
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint',
+  ],
+  env: {
     'browser': true,
     'node': true,
     'mocha': true,
     'es2017': true
   },
-  'extends': 'eslint:recommended',
+  'extends': ['eslint:recommended','plugin:@typescript-eslint/recommended'],
   'globals': {
     'Uint8Array': false,
     'define': false,
