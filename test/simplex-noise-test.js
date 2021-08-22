@@ -1,3 +1,5 @@
+/* global describe, it, beforeEach */
+
 var SimplexNoise = require('../simplex-noise');
 var Alea = require('alea');
 var assert = require('chai').assert;
