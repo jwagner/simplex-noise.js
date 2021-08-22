@@ -9,12 +9,12 @@
     "simplex-noise.js"
   ],
   "devDependencies": {
-    "alea": "0.0.9",
-    "benchmark": "~2.1.4",
-    "chai": "^4.2.0",
+    "alea": "^1.0.0",
+    "benchmark": "^2.1.4",
+    "chai": "^4.3.4",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
-    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
