@@ -1,8 +1,7 @@
-/* global describe, it, beforeEach */
-
-var SimplexNoise = require('../simplex-noise');
-var Alea = require('alea');
-var assert = require('chai').assert;
+const SimplexNoise = require('../simplex-noise');
+const Alea = require('alea');
+const assert = require('chai').assert;
+const {assertMatchesImage, sampleFunctionToImageData} = require('./matches-snapshot.js');
 
 describe('SimplexNoise', function() {
   function getRandom() {
@@ -24,6 +23,12 @@ describe('SimplexNoise', function() {
       for (var i = 0; i < aTable.length; i++) {
         assert.equal(aTable[i], i);
       }
+    });
+    it('matches snapshot', function() {
+      var table = SimplexNoise._buildPermutationTable(getRandom());
+
+      const actual = {width: 16, height: 16, data: new Uint8ClampedArray(table)};
+      assertMatchesImage(actual, 'permutationTable.png');
     });
   });
 
@@ -96,6 +101,10 @@ describe('SimplexNoise', function() {
       it('should return similar values for similar inputs', function() {
         assert(Math.abs(simplex.noise2D(0.1, 0.2) - simplex.noise2D(0.101, 0.202)) < 0.1);
       });
+      it('should match snapshot', function() {
+        const actual = sampleFunctionToImageData((x,y)=>simplex.noise2D(x/10,y/10)*128+128, 64, 64);
+        assertMatchesImage(actual, 'noise2D.png');
+      });
     });
 
     describe('noise3D', function() {
@@ -120,6 +129,10 @@ describe('SimplexNoise', function() {
       });
       it('should return similar values for similar inputs', function() {
         assert(Math.abs(simplex.noise3D(0.1, 0.2, 0.3) - simplex.noise3D(0.101, 0.202, 0.303)) < 0.1);
+      });
+      it('should match snapshot', function() {
+        const actual = sampleFunctionToImageData((x,y)=>simplex.noise3D(x/10,y/10,(x+y)/2)*128+128, 64, 64);
+        assertMatchesImage(actual, 'noise3D.png');
       });
     });
 
@@ -149,6 +162,10 @@ describe('SimplexNoise', function() {
             simplex.noise4D(0.1, 0.2, 0.3, 0.4) -
             simplex.noise4D(0.101, 0.202, 0.303, 0.404)
           ) < 0.1);
+      });
+      it('should match snapshot', function() {
+        const actual = sampleFunctionToImageData((x,y)=>simplex.noise4D(x/10,y/10,x/4,y/3)*128+128, 64, 64);
+        assertMatchesImage(actual, 'noise4D.png');
       });
     });
   });

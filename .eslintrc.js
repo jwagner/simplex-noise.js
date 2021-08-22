@@ -1,7 +1,9 @@
 module.exports = {
   'env': {
     'browser': true,
-    'node': true
+    'node': true,
+    'mocha': true,
+    'es2017': true
   },
   'extends': 'eslint:recommended',
   'globals': {
@@ -9,9 +11,6 @@ module.exports = {
     'define': false,
     'Float32Array': false
   },
-  'plugins': [
-    'mocha'
-  ],
   'rules': {
     'indent': [
       'error',
