@@ -72,7 +72,7 @@
     "start": "parcel test/visual.html",
     "test": "eslint simplex-noise.ts && mocha && ./test/module-compatibility.sh",
     "build": "./build.sh",
-    "docs": "typedoc --out public/docs simplex-noise.ts",
+    "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
     "prepare": "npm run-script build",
     "benchmark": "parcel build && node ./perf/benchmark.js"
   }

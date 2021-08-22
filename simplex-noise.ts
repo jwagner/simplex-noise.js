@@ -59,7 +59,10 @@ const grad4 = new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, 
   1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
   -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]);
 
-type RandomFn = () => number;
+/**
+ * A random() function, must return a numer in the interval [0,1), just like Math.random().
+ */ 
+export type RandomFn = () => number;
 
 /** Deterministic simplex noise generator suitable for 2D, 3D and 4D spaces. */
 export class SimplexNoise {
@@ -68,7 +71,7 @@ export class SimplexNoise {
   private permMod12: Uint8Array;
   /**
    * Creates a new `SimplexNoise` instance.
-   * This involves some setup costs so should preferably only be called once.
+   * This involves some setup. You can save a few cpu cycles by reusing the same instance.
    * @param randomOrSeed A random number generator or a seed (string|number).
    * Defaults to Math.random (random irreproducible initialization).
    */
@@ -83,6 +86,12 @@ export class SimplexNoise {
     }
   }
 
+  /**
+   * Samples the noise field in 2 dimensions
+   * @param x
+   * @param y 
+   * @returns a number in the interval [-1, 1]
+   */
   noise2D(x: number, y: number): number {
     const permMod12 = this.permMod12;
     const perm = this.perm;
@@ -142,7 +151,14 @@ export class SimplexNoise {
     // The result is scaled to return values in the interval [-1,1].
     return 70.0 * (n0 + n1 + n2);
   }
-  // 3D simplex noise
+
+  /**
+   * Samples the noise field in 3 dimensions
+   * @param x 
+   * @param y 
+   * @param z 
+   * @returns a number in the interval [-1, 1]
+   */
   noise3D(x:number, y:number, z:number): number {
     const permMod12 = this.permMod12;
     const perm = this.perm;
@@ -265,7 +281,14 @@ export class SimplexNoise {
     // The result is scaled to stay just inside [-1,1]
     return 32.0 * (n0 + n1 + n2 + n3);
   }
-  // 4D simplex noise, better simplex rank ordering method 2012-03-09
+
+  /**
+   * Samples the noise field in 4 dimensions
+   * @param x 
+   * @param y 
+   * @param z 
+   * @returns a number in the interval [-1, 1]
+   */
   noise4D(x:number, y:number, z:number, w:number): number {
     const perm = this.perm;
 
@@ -395,6 +418,9 @@ export class SimplexNoise {
 export default SimplexNoise;
 
 /**
+ * Builds a random permutation table.
+ * This is exported only for (internal) testing purposes.
+ * Do not rely on this export.
  * @private
  */
 export function buildPermutationTable(random: RandomFn): Uint8Array {

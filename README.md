@@ -1,7 +1,14 @@
 # simplex-noise.js
-[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml)
 
-simplex-noise.js is a fast simplex noise implementation in Javascript. It works in the browser and on nodejs.
+[API Documentation](https://29a.ch/simplex-noise/docs/classes/SimplexNoise.html)
+
+[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+
+
+simplex-noise.js is a simplex noise implementation in Javascript/TypeScript.
+It works in the browser and nodejs. Using Commonjs and ES Modules.
+It is self contained (dependency free), relatively small (about 2k minified and gzipped)
+and fairly fast (about 20 nanoseconds for a sample of 2d noise).
 
 ## Demos
 
@@ -92,7 +99,7 @@ npm install && npm test
 
 ## Changelog
 
-### 3.0.0
+### main
 - Changed module structure. When using bundlers that import the es module even using require() the import might need to be updated.
 - Dependency update
 - Setting sideEffects: false in package.json
@@ -139,7 +146,7 @@ you will need to use a polyfill like [typedarray.js](http://www.calormen.com/pol
 
 
 ## License
-Copyright (c) 2015 Jonas Wagner, licensed under the MIT License (enclosed)
+Copyright (c) 2021 Jonas Wagner, licensed under the MIT License (enclosed)
 
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
@@ -147,4 +154,4 @@ by Stefan Gustavson and Peter Eastman.
 
 The integrated pseudo random generator is based on code by by Johannes Baagøe.
 
-The typescript definition has been provided by [Neonit](https://github.com/Neonit).
+The initial typescript definition has been provided by [Neonit](https://github.com/Neonit).
