@@ -1,7 +1,10 @@
-const SimplexNoise = require('../simplex-noise');
+import SimplexNoise from '../simplex-noise';
+import {buildPermutationTable} from '../simplex-noise';
+
+
 const Alea = require('alea');
 const assert = require('chai').assert;
-const {assertMatchesImage, sampleFunctionToImageData} = require('./matches-snapshot.js');
+import {assertMatchesImage, sampleFunctionToImageData} from './matches-snapshot';
 
 describe('SimplexNoise', function() {
   function getRandom() {
@@ -10,7 +13,7 @@ describe('SimplexNoise', function() {
 
   describe('buildPermutationTable', function() {
     it('contains all indices exactly once', function() {
-      var table = SimplexNoise._buildPermutationTable(getRandom());
+      var table = buildPermutationTable(getRandom());
       var aTable = Array.prototype.slice.call(table);
       for (var i = 0; i < aTable.length; i++) {
         assert.include(aTable, i);
@@ -18,14 +21,14 @@ describe('SimplexNoise', function() {
     });
     it('can contain 0 in the first position', function() {
       function zero() { return 0; }
-      var table = SimplexNoise._buildPermutationTable(zero);
+      var table = buildPermutationTable(zero);
       var aTable = Array.prototype.slice.call(table);
       for (var i = 0; i < aTable.length; i++) {
         assert.equal(aTable[i], i);
       }
     });
     it('matches snapshot', function() {
-      var table = SimplexNoise._buildPermutationTable(getRandom());
+      var table = buildPermutationTable(getRandom());
 
       const actual = {width: 16, height: 16, data: new Uint8ClampedArray(table)};
       assertMatchesImage(actual, 'permutationTable.png');
@@ -33,14 +36,14 @@ describe('SimplexNoise', function() {
   });
 
   describe('constructor', function() {
-    function checkPermutationTable(simplex) {
-      assert.equal(simplex.perm.length, 512);
-      assert.equal(simplex.permMod12.length, 512);
-      for (var i = 0; i < 512; i++) {
-        assert.isBelow(simplex.perm[i], 256);
-        assert.isAtLeast(simplex.perm[i], 0);
-        assert.equal(simplex.perm[i], simplex.perm[i & 255]);
-        assert.equal(simplex.permMod12[i], simplex.perm[i] % 12);
+    function checkPermutationTable(simplex: SimplexNoise) {
+      assert.equal(simplex['perm'].length, 512);
+      assert.equal(simplex['permMod12'].length, 512);
+      for (let i = 0; i < 512; i++) {
+        assert.isBelow(simplex['perm'][i], 256);
+        assert.isAtLeast(simplex['perm'][i], 0);
+        assert.equal(simplex['perm'][i], simplex['perm'][i & 255]);
+        assert.equal(simplex['permMod12'][i], simplex['perm'][i] % 12);
       }
     }
 
@@ -75,7 +78,7 @@ describe('SimplexNoise', function() {
   });
 
   describe('noise', function() {
-    var simplex;
+    let simplex: SimplexNoise;
     beforeEach(function() {
       simplex = new SimplexNoise(getRandom());
     });
@@ -117,7 +120,7 @@ describe('SimplexNoise', function() {
       });
       it('should return a different output with a different seed', function() {
         var simplex2 = new SimplexNoise(new Alea('other seed'));
-        assert.notEqual(simplex.noise2D(0.1, 0.2, 0.3), simplex2.noise2D(0.1, 0.2, 0.3));
+        assert.notEqual(simplex.noise3D(0.1, 0.2, 0.3), simplex2.noise3D(0.1, 0.2, 0.3));
       });
       it('should return values between -1 and 1', function() {
         for (var x = 0; x < 10; x++) {
@@ -146,7 +149,7 @@ describe('SimplexNoise', function() {
       });
       it('should return a different output with a different seed', function() {
         var simplex2 = new SimplexNoise(new Alea('other seed'));
-        assert.notEqual(simplex.noise2D(0.1, 0.2, 0.3, 0.4), simplex2.noise2D(0.1, 0.2, 0.3, 0.4));
+        assert.notEqual(simplex.noise4D(0.1, 0.2, 0.3, 0.4), simplex2.noise4D(0.1, 0.2, 0.3, 0.4));
       });
       it('should return values between -1 and 1', function() {
         for (var x = 0; x < 10; x++) {

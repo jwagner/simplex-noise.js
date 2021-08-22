@@ -4,12 +4,23 @@
   "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
-  "main": "./simplex-noise",
+  "source": "simplex-noise.ts",
+  "main": "dist/simplex-noise.js",
+  "module": "dist/simplex-noise.mjs",
+  "types": "dist/types.d.ts",
   "sideEffects": false,
   "files": [
-    "simplex-noise.js"
+    "dist/simplex-noise.js",
+    "dist/simplex-noise.js.map",
+    "dist/simplex-noise.mjs",
+    "dist/simplex-noise.mjs.map",
+    "dist/index.d.ts"
   ],
   "devDependencies": {
+    "@parcel/packager-ts": "^2.0.0-rc.0",
+    "@parcel/transformer-typescript-types": "^2.0.0-rc.0",
+    "@types/mocha": "^9.0.0",
+    "@types/pngjs": "^6.0.1",
     "alea": "^1.0.0",
     "benchmark": "^2.1.4",
     "chai": "^4.3.4",
@@ -19,7 +30,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "mocha": "^9.1.0",
-    "pngjs": "^6.0.0"
+    "parcel": "^2.0.0-rc.0",
+    "pngjs": "^6.0.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5"
   },
   "bugs": {
     "url": "https://github.com/jwagner/simplex-noise.js/issues"
@@ -40,7 +54,10 @@
     "url": "https://github.com/jwagner/simplex-noise.js.git"
   },
   "scripts": {
-    "test": "eslint simplex-noise.js && mocha",
+    "start": "parcel test/visual.html",
+    "test": "eslint simplex-noise.ts && mocha",
+    "build": "parcel build",
+    "prepare": "npm run-script build",
     "benchmark": "node ./perf/benchmark.js"
   }
 }

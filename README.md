@@ -80,6 +80,10 @@ npm install && npm test
 ### main
 - Dependency update
 - Setting sideEffects: false in package.json
+- Added snapshot tests
+- Code converted to typescript, the package can of course still be used from regular JS
+- Dropped bower
+- Added support for es modules
 
 ### 2.4.0
 - Included a PRNG based on ALEA to directly allow seeding

@@ -11,6 +11,9 @@ module.exports = {
     'define': false,
     'Float32Array': false
   },
+  'parserOptions': {
+    'sourceType': 'module'
+  },
   'rules': {
     'indent': [
       'error',
