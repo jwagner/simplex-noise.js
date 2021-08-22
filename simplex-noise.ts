@@ -62,7 +62,7 @@ const grad4 = new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, 
 type RandomFn = () => number;
 
 /** Deterministic simplex noise generator suitable for 2D, 3D and 4D spaces. */
-export default class SimplexNoise {
+export class SimplexNoise {
   private p: Uint8Array;
   private perm: Uint8Array;
   private permMod12: Uint8Array;
@@ -392,6 +392,7 @@ export default class SimplexNoise {
     return 27.0 * (n0 + n1 + n2 + n3 + n4);
   }
 }
+export default SimplexNoise;
 
 /**
  * @private
@@ -463,10 +464,4 @@ function masher() {
     }
     return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
   };
-}
-
-// nasty hack to make the default export stay the same as 2.x
-// when used in commonjs
-if (typeof module !== undefined) {
-  module.exports = SimplexNoise;
 }

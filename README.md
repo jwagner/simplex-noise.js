@@ -9,11 +9,20 @@ simplex-noise.js is a fast simplex noise implementation in Javascript. It works 
 - [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example.
 - Film grain in [analog film emulator](http://29a.ch/film-emulator/).
 
+Created something awesome with simplex-noise? Let me know so I can add it to the list.
+
 ## Installation
 
 ```npm i -S simplex-noise```
 
 ## Usage
+
+```javascript
+// when using es modules
+import SimplexNoise from 'simplex-noise';
+// when using commonjs
+const {SimplexNoise} = require('simplex-noise');
+```
 
 By default simplex-noise.js will use Math.random() to seed the noise.
 ```javascript
@@ -61,12 +70,18 @@ const SimplexNoise = require('simplex-noise'),
 
 ## Benchmarks
 
-- [Comparison between 2D and 3D noise](http://jsperf.com/simplex-noise/4)
-- [Comparison with simplex implementation in three.js](http://jsperf.com/simplex-noise-comparison/3)
+simplex-noise.js is reasonably quick.
+According to `perf/benchmark.js` I can perform about 50 million `noise2D()` calls/second on a single thread on my desktop (Ryzen 5950X).
+So ~20 nanoseconds per call.
 
-For development you can open `perf/index.html` and watch the console or run `node perf/benchmark.js` in a shell.
-There is also a rake task for comparing your current changes can also run `make compare`.
-The command works using git stash.
+```
+$ node perf/index.js
+27745787.933336906
+init: 192,590 ops/sec ±1%
+noise2D: 57,928,891 ops/sec ±1%
+noise3D: 34,159,230 ops/sec ±0%
+noise4D: 24,589,786 ops/sec ±0%
+```
 
 ## Tests
 
@@ -77,7 +92,8 @@ npm install && npm test
 
 ## Changelog
 
-### main
+### 3.0.0
+- Changed module structure. When using bundlers that import the es module even using require() the import might need to be updated.
 - Dependency update
 - Setting sideEffects: false in package.json
 - Added snapshot tests

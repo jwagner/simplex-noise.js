@@ -4,15 +4,14 @@
     "target": "es2019",
     "declaration": true,
     "strict": true,
-    "outDir": "./dist/",
+    "outDir": "./dist/cjs/",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "react"
+    "sourceMap": true
   },
-  "exclude": [
-    "dist",
-    "test"
+  "files": [
+    "commonjs-wrapper.ts"
   ]
 }
