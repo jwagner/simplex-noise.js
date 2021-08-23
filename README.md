@@ -63,7 +63,7 @@ const random = new Alea(seed),
     value2d = simplex.noise2D(x, y);
 ```
 
-The ALEA PRNG can be found on in the npm package [alea](https://npmjs.org/package/alea).
+The ALEA PRNG can be found in the npm package [alea](https://npmjs.org/package/alea).
 
 ## node.js
 
@@ -99,7 +99,7 @@ npm install && npm test
 
 ## Changelog
 
-### main
+### 3.0.0
 - Changed module structure. When using bundlers that import the es module even using require() the import might need to be updated.
 - Dependency update
 - Setting sideEffects: false in package.json
