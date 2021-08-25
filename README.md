@@ -90,6 +90,15 @@ noise3D: 34,159,230 ops/sec ±0%
 noise4D: 24,589,786 ops/sec ±0%
 ```
 
+At least at a glance it also seems to be faster than 'fast-simplex-noise':
+```
+simplex-noise noise2D: 53,429,815 ops/sec ±0%
+fast-simplex-noise noise2D: 6,239,845 ops/sec ±0%
+
+simplex-noise noise4D: 22,578,593 ops/sec ±0%
+fast-simplex-noise noise4D: 5,292,975 ops/sec ±0%
+```
+
 ## Tests
 
 There are some simple unit tests for this library to run them
