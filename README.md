@@ -108,6 +108,9 @@ npm install && npm test
 
 ## Changelog
 
+### 3.0.1
+- Include simplex-noise.ts as source file, fixes sourcemap warnings.
+
 ### 3.0.0
 - Changed module structure. When using bundlers that import the es module even using require() the import might need to be updated.
 - Dependency update
