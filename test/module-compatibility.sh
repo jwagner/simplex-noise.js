@@ -31,6 +31,12 @@ echo "testing webpack commonjs module.exports"
 npx webpack --entry ./commonjs-exports.js && node dist/main.js
 echo "testing webpack esm"
 npx webpack --entry ./esm.mjs && node dist/main.js
+echo "testing webpack esm with source-map-loader for warnings"
+OUT=$(npx webpack --entry ./esm.mjs --config ./webpack.config-sourcemap.js 2>&1)
+if [[ "$OUT" == *"WARNING"* ]]; then
+  echo $OUT
+  exit 1
+fi
 cd ..
 
 cd ..

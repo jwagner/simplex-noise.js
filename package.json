@@ -4,7 +4,6 @@
   "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
-  "source": "simplex-noise.ts",
   "main": "dist/cjs/commonjs-wrapper.js",
   "module": "dist/esm/simplex-noise.js",
   "exports": {
@@ -45,6 +44,7 @@
     "mocha": "^9.1.0",
     "parcel": "^2.0.0-rc.0",
     "pngjs": "^6.0.0",
+    "source-map-loader": "^3.0.1",
     "ts-node": "^10.2.1",
     "typedoc": "^0.21.6",
     "typescript": "^4.3.5",
