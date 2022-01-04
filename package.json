@@ -21,7 +21,8 @@
     "dist/cjs/simplex-noise.d.ts",
     "dist/cjs/commonjs-wrapper.js",
     "dist/cjs/commonjs-wrapper.js.map",
-    "dist/cjs/commonjs-wrapper.d.ts"
+    "dist/cjs/commonjs-wrapper.d.ts",
+    "simplex-noise.ts"
   ],
   "devDependencies": {
     "@parcel/packager-ts": "^2.0.0-rc.0",
