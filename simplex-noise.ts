@@ -442,7 +442,7 @@ The ALEA PRNG and masher code used by simplex-noise.js
 is based on code by Johannes Baagøe, modified by Jonas Wagner.
 See alea.md for the full license.
 */
-function alea(seed: string|number): RandomFn {
+export function alea(seed: string|number): RandomFn {
   let s0 = 0;
   let s1 = 0;
   let s2 = 0;
