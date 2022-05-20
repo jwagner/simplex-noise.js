@@ -33,7 +33,6 @@
     "@types/pngjs": "^6.0.1",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
-    "alea": "^1.0.0",
     "benchmark": "^2.1.4",
     "chai": "^4.3.4",
     "eslint": "^7.32.0",
@@ -77,5 +76,8 @@
     "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
     "prepare": "npm run-script build",
     "benchmark": "parcel build && node ./perf/benchmark.js"
+  },
+  "dependencies": {
+    "alea": "^1.0.1"
   }
 }
