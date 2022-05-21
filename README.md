@@ -5,9 +5,9 @@
 [![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 
-simplex-noise.js is a simplex noise implementation in Javascript/TypeScript.
+A simplex noise implementation in Javascript/TypeScript.
 It works in the browser and nodejs. Using Commonjs and ES Modules.
-It is self contained (dependency free), relatively small (about 2k minified and gzipped)
+It has minimal dependencies (only alea,) relatively small (about 2k minified and gzipped)
 and fairly fast (about 20 nanoseconds for a sample of 2d noise).
 
 ## Demos
@@ -42,7 +42,7 @@ const simplex = new SimplexNoise(),
 ```
 
 You can also pass in a seed string which will then be used to initialize
-the noise using the built in alea PRNG.
+the noise using the alea PRNG.
 ```javascript
 const simplex = new SimplexNoise('seed'),
     value2d = simplex.noise2D(x, y),
