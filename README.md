@@ -22,58 +22,55 @@ Created something awesome with simplex-noise? Let me know so I can add it to the
 
 ```npm i -S simplex-noise```
 
-## Usage
+## Usage Examples
+
+### ES Module Import
 
 ```javascript
-// when using es modules
-import SimplexNoise from 'simplex-noise';
-// when using commonjs
-const {SimplexNoise} = require('simplex-noise');
+// when using ES modules
+import { noiseFunction2D } from 'simplex-noise';
 ```
+
+### CommonJS Require
+
+```javascript
+const { noiseFunction2D } = require('simplex-noise');
+```
+
+### 2D
+
+```
+const noise2D = noiseFunction2D();
+console.log(noise2D(x, y));
+```
+
+### 3D
+
+```
+const noise3D = noiseFunction3D();
+console.log(noise3D(x, y, z));
+```
+
+### 4D
+
+```
+const noise4D = noiseFunction4D();
+console.log(noise4D(x, y, z, w));
+```
+
+### Using a seed value
 
 By default simplex-noise.js will use Math.random() to seed the noise.
-```javascript
-// initializing a new simplex instance
-// do this only once as it is relatively expensive
-const simplex = new SimplexNoise(),
-    value2d = simplex.noise2D(x, y),
-    value3d = simplex.noise3D(x, y, z),
-    value4d = simplex.noise4D(x, y, z, w);
+You can pass in a PRNG function to use your own seed value.
+
+```
+import Alea from 'alea';
+const alea = new Alea('seed');
+const noise2D = noiseFunction2D(alea);
+console.log(noise2D(x, y));
 ```
 
-You can also pass in a seed string which will then be used to initialize
-the noise using the built in alea PRNG.
-```javascript
-const simplex = new SimplexNoise('seed'),
-    value2d = simplex.noise2D(x, y),
-    sameSeed = new SimplexNoise('seed'),
-    differentSeed = new SimplexNoise('different seed');
-
-sameSeed.noise2D(x, y) === value2d
-differentSeed.noise2D(x, y) !== value2d
-```
-
-You can also pass an alternative random function to the constructor that is
-used to build the permutation table.
-This can be used with a custom pseudo random number generator:
-
-```javascript
-const random = new Alea(seed),
-    simplex = new SimplexNoise(random),
-    value2d = simplex.noise2D(x, y);
-```
-
-The ALEA PRNG can be found in the npm package [alea](https://npmjs.org/package/alea).
-
-## node.js
-
-Node.js is also supported, you can install the package using [npm](https://npmjs.org/package/simplex-noise).
-
-```javascript
-const SimplexNoise = require('simplex-noise'),
-    simplex = new SimplexNoise(Math.random),
-    value2d = simplex.noise2D(x, y);
-```
+The ALEA PRNG used in the example above can be found in the [alea](https://npmjs.org/package/alea) npm package.
 
 ## Benchmarks
 

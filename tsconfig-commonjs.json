@@ -12,6 +12,6 @@
     "sourceMap": true
   },
   "files": [
-    "commonjs-wrapper.ts"
+    "simplex-noise.ts"
   ]
 }

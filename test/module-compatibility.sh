@@ -13,22 +13,18 @@ cd e2e
 cp -R ../test/module-compatibility .
 cd module-compatibility
 npm install "../$tarball" 
-echo "testing node commonjs module.exports"
-node commonjs-exports.js
-echo "testing node commonjs alias"
-node commonjs-alias.js
+echo "testing node commonjs"
+node commonjs.js
 if [ "$node_major_version" -ge 14 ]
   then
-  echo "testing typescript"
-  cp esm.mjs typescript.ts
-  node --loader ts-node/esm  typescript.ts
   echo "testing node esm"
   node esm.mjs
+  echo "testing typescript"
+  cp esm.mjs typescript.ts
+  node --loader ts-node/esm typescript.ts
 fi
-echo "testing webpack commonjs alias"
-npx webpack --entry ./commonjs-alias.js && node dist/main.js
-echo "testing webpack commonjs module.exports"
-npx webpack --entry ./commonjs-exports.js && node dist/main.js
+echo "testing webpack commonjs"
+npx webpack --entry ./commonjs.js && node dist/main.js
 echo "testing webpack esm"
 npx webpack --entry ./esm.mjs && node dist/main.js
 echo "testing webpack esm with source-map-loader for warnings"
