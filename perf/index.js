@@ -1,22 +1,34 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-let Benchmark = require('benchmark');
-let SimplexNoise = require('..').SimplexNoise;
+const Benchmark = require('benchmark');
+const Alea = require('alea');
+const {noiseFunction2D, noiseFunction3D, noiseFunction4D} = require('..');
 
 const invocationsPerRun = 8*8*8;
-const simplex = new SimplexNoise('seed');
+const rnd = () => new Alea('seed');
+//console.log(rnd()());
+const noise2D = noiseFunction2D(rnd());
+const noise3D = noiseFunction3D(rnd());
+const noise4D = noiseFunction4D(rnd());
 
 // prevent the compiler from optimizing away the calls
 let sideEffect = 0.0;
+
 new Benchmark.Suite('simplex-noise')
-  .add('init', function() {
-    new SimplexNoise();
-  })
+  // .add('init2D', function() {
+  //   noiseFunction2D();
+  // })
+  // .add('init3D', function() {
+  //   noiseFunction3D();
+  // })
+  // .add('init4D', function() {
+  //   noiseFunction4D();
+  // })
   .add('noise2D', function() {
     let a = 0.0;
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
         for (let z = 0; z < 8; z++) {
-          a += simplex.noise2D(x / 8, y / 8);
+          a += noise2D(x / 8, y / 8);
         }
       }
     }
@@ -27,7 +39,7 @@ new Benchmark.Suite('simplex-noise')
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
         for (let z = 0; z < 8; z++) {
-          a += simplex.noise3D(x / 8, y / 8, z / 8);
+          a += noise3D(x / 8, y / 8, z / 8);
         }
       }
     }
@@ -38,7 +50,7 @@ new Benchmark.Suite('simplex-noise')
     for (let x = 0; x < 8; x++) {
       for (let y = 0; y < 8; y++) {
         for (let z = 0; z < 8; z++) {
-          a += simplex.noise4D(x / 8, y / 8, z / 8, (x + y) / 16);
+          a += noise4D(x / 8, y / 8, z / 8, (x + y) / 16);
         }
       }
     }
@@ -56,4 +68,4 @@ new Benchmark.Suite('simplex-noise')
       );
     });
   })
-  .run();
+  .run({delay: 10, minTime: 20, maxTime: 25});

@@ -6,7 +6,7 @@ Which is based on example code by Stefan Gustavson (stegu@itn.liu.se).
 With Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
 Better rank ordering method by Stefan Gustavson in 2012.
 
- Copyright (c) 2021 Jonas Wagner
+ Copyright (c) 2022 Jonas Wagner
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -60,41 +60,27 @@ const grad4 = new Float32Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, 
   -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]);
 
 /**
- * A random() function, must return a numer in the interval [0,1), just like Math.random().
- */ 
+ * A random() function, must return a number in the interval [0,1), just like Math.random().
+ */
 export type RandomFn = () => number;
 
-/** Deterministic simplex noise generator suitable for 2D, 3D and 4D spaces. */
-export class SimplexNoise {
-  private p: Uint8Array;
-  private perm: Uint8Array;
-  private permMod12: Uint8Array;
-  /**
-   * Creates a new `SimplexNoise` instance.
-   * This involves some setup. You can save a few cpu cycles by reusing the same instance.
-   * @param randomOrSeed A random number generator or a seed (string|number).
-   * Defaults to Math.random (random irreproducible initialization).
-   */
-  constructor(randomOrSeed: RandomFn|string|number = Math.random) {
-    const random = typeof randomOrSeed == 'function' ? randomOrSeed : alea(randomOrSeed);
-    this.p = buildPermutationTable(random);
-    this.perm = new Uint8Array(512);
-    this.permMod12 = new Uint8Array(512);
-    for (let i = 0; i < 512; i++) {
-      this.perm[i] = this.p[i & 255];
-      this.permMod12[i] = this.perm[i] % 12;
-    }
-  }
+/**
+ * Samples the noise field in two dimensions
+ * @param x
+ * @param y
+ * @returns a number in the interval [-1, 1]
+ */
+export type NoiseFunction2D = (x: number, y: number) => number;
 
-  /**
-   * Samples the noise field in 2 dimensions
-   * @param x
-   * @param y 
-   * @returns a number in the interval [-1, 1]
-   */
-  noise2D(x: number, y: number): number {
-    const permMod12 = this.permMod12;
-    const perm = this.perm;
+/**
+ * Creates a 2D noise function
+ * @param random the random function that will be used to build the permutation table
+ * @returns {NoiseFunction2D}
+ */
+export function noiseFunction2D(random: RandomFn = Math.random): NoiseFunction2D {
+  const perm = buildPermutationTable(random);
+  const permMod12 = perm.map(v => v % 12);
+  return function noise2D(x: number, y: number): number {
     let n0 = 0; // Noise contributions from the three corners
     let n1 = 0;
     let n2 = 0;
@@ -150,18 +136,28 @@ export class SimplexNoise {
     // Add contributions from each corner to get the final noise value.
     // The result is scaled to return values in the interval [-1,1].
     return 70.0 * (n0 + n1 + n2);
-  }
+  };
+}
 
-  /**
-   * Samples the noise field in 3 dimensions
-   * @param x 
-   * @param y 
-   * @param z 
-   * @returns a number in the interval [-1, 1]
-   */
-  noise3D(x:number, y:number, z:number): number {
-    const permMod12 = this.permMod12;
-    const perm = this.perm;
+/**
+ * Samples the noise field in three dimensions
+ * @param x
+ * @param y
+ * @param z
+ * @returns a number in the interval [-1, 1]
+ */
+export type NoiseFunction3D = (x: number, y: number, z: number) => number;
+
+/**
+ * Creates a 3D noise function
+ * @param random the random function that will be used to build the permutation table
+ * @returns {NoiseFunction3D}
+ */
+export function noiseFunction3D(random: RandomFn = Math.random): NoiseFunction3D {
+  const perm = buildPermutationTable(random);
+  const permMod12 = perm.map(v => v % 12);
+
+  return function noise3D(x: number, y: number, z: number): number {
     let n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
     const s = (x + y + z) * F3; // Very nice and simple skew factor for 3D
@@ -280,18 +276,27 @@ export class SimplexNoise {
     // Add contributions from each corner to get the final noise value.
     // The result is scaled to stay just inside [-1,1]
     return 32.0 * (n0 + n1 + n2 + n3);
-  }
+  };
+}
 
-  /**
-   * Samples the noise field in 4 dimensions
-   * @param x 
-   * @param y 
-   * @param z 
-   * @returns a number in the interval [-1, 1]
-   */
-  noise4D(x:number, y:number, z:number, w:number): number {
-    const perm = this.perm;
+/**
+ * Samples the noise field in four dimensions
+ * @param x
+ * @param y
+ * @param z
+ * @param w
+ * @returns a number in the interval [-1, 1]
+ */
+export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => number;
 
+/**
+ * Creates a 4D noise function
+ * @param random the random function that will be used to build the permutation table
+ * @returns {NoiseFunction3D}
+ */
+export function noiseFunction4D(random: RandomFn = Math.random) {
+  const perm = buildPermutationTable(random);
+  return function noise4D(x: number, y: number, z: number, w: number): number {
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
     // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
     const s = (x + y + z + w) * F4; // Factor for 4D skewing
@@ -413,9 +418,8 @@ export class SimplexNoise {
     }
     // Sum up and scale the result to cover the range [-1,1]
     return 27.0 * (n0 + n1 + n2 + n3 + n4);
-  }
+  };
 }
-export default SimplexNoise;
 
 /**
  * Builds a random permutation table.
@@ -424,70 +428,19 @@ export default SimplexNoise;
  * @private
  */
 export function buildPermutationTable(random: RandomFn): Uint8Array {
-  const p = new Uint8Array(256);
-  for (let i = 0; i < 256; i++) {
+  const tableSize = 512;
+  const p = new Uint8Array(tableSize);
+  for (let i = 0; i < tableSize / 2; i++) {
     p[i] = i;
   }
-  for (let i = 0; i < 255; i++) {
+  for (let i = 0; i < tableSize / 2 - 1; i++) {
     const r = i + ~~(random() * (256 - i));
     const aux = p[i];
     p[i] = p[r];
     p[r] = aux;
   }
+  for (let i = 256; i < tableSize; i++) {
+    p[i] = p[i - 256];
+  }
   return p;
-}
-
-/*
-The ALEA PRNG and masher code used by simplex-noise.js
-is based on code by Johannes Baagøe, modified by Jonas Wagner.
-See alea.md for the full license.
-*/
-function alea(seed: string|number): RandomFn {
-  let s0 = 0;
-  let s1 = 0;
-  let s2 = 0;
-  let c = 1;
-
-  const mash = masher();
-  s0 = mash(' ');
-  s1 = mash(' ');
-  s2 = mash(' ');
-
-  s0 -= mash(seed);
-  if (s0 < 0) {
-    s0 += 1;
-  }
-  s1 -= mash(seed);
-  if (s1 < 0) {
-    s1 += 1;
-  }
-  s2 -= mash(seed);
-  if (s2 < 0) {
-    s2 += 1;
-  }
-
-  return function() {
-    const t = 2091639 * s0 + c * 2.3283064365386963e-10; // 2^-32
-    s0 = s1;
-    s1 = s2;
-    return s2 = t - (c = t | 0);
-  };
-}
-
-function masher() {
-  let n = 0xefc8249d;
-  return function(data: number|string) {
-    data = data.toString();
-    for (let i = 0; i < data.length; i++) {
-      n += data.charCodeAt(i);
-      let h = 0.02519603282416938 * n;
-      n = h >>> 0;
-      h -= n;
-      h *= n;
-      n = h >>> 0;
-      h -= n;
-      n += h * 0x100000000; // 2^32
-    }
-    return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
-  };
 }
