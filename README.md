@@ -27,33 +27,35 @@ Created something awesome with simplex-noise? Let me know so I can add it to the
 ### ES Module Import
 
 ```javascript
-// when using ES modules
+// import the noise functions you need
 import { noiseFunction2D } from 'simplex-noise';
 ```
 
 ### CommonJS Require
 
 ```javascript
+// import the noise functions you need
 const { noiseFunction2D } = require('simplex-noise');
 ```
 
 ### 2D
 
-```
+```javascript
+// initialize the noise function
 const noise2D = noiseFunction2D();
 console.log(noise2D(x, y));
 ```
 
 ### 3D
 
-```
+```javascript
 const noise3D = noiseFunction3D();
 console.log(noise3D(x, y, z));
 ```
 
 ### 4D
 
-```
+```javascript
 const noise4D = noiseFunction4D();
 console.log(noise4D(x, y, z, w));
 ```
@@ -63,9 +65,11 @@ console.log(noise4D(x, y, z, w));
 By default simplex-noise.js will use Math.random() to seed the noise.
 You can pass in a PRNG function to use your own seed value.
 
-```
+```javascript
 import Alea from 'alea';
+// create a new random function based on the seed
 const alea = new Alea('seed');
+// use the seeded random function to initialize the noise function
 const noise2D = noiseFunction2D(alea);
 console.log(noise2D(x, y));
 ```
@@ -160,7 +164,5 @@ Copyright (c) 2021 Jonas Wagner, licensed under the MIT License (enclosed)
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
 by Stefan Gustavson and Peter Eastman.
-
-The integrated pseudo random generator is based on code by by Johannes Baagøe.
 
 The initial typescript definition has been provided by [Neonit](https://github.com/Neonit).

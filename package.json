@@ -40,6 +40,7 @@
     "eslint-plugin-n": "^15.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "microtime": "^3.1.0",
     "mocha": "^10.0.0",
     "parcel": "^2.6.0",
     "pngjs": "^6.0.0",
@@ -75,8 +76,5 @@
     "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
     "prepare": "npm run-script build",
     "benchmark": "parcel build && node ./perf/benchmark.js"
-  },
-  "dependencies": {
-    "microtime": "^3.0.0"
   }
 }
