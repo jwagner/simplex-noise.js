@@ -3,3 +3,5 @@
 /dist
 /e2e
 /public
+/coverage
+/.nyc_output

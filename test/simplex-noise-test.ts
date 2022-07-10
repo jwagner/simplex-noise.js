@@ -10,6 +10,16 @@ function getRandom(seed = 'seed') {
   return alea(seed);
 }
 
+const mathRandom = Math.random;
+
+beforeEach(() => {
+  Math.random = getRandom('Math.random');
+});
+
+afterEach(() => {
+  Math.random = mathRandom;
+});
+
 describe('buildPermutationTable', function () {
   it('first half contains all indices exactly once', function () {
     const table = buildPermutationTable(getRandom());
@@ -51,6 +61,11 @@ describe('buildPermutationTable', function () {
 describe('createNoise2D', () => {
   const noise2D = createNoise2D(getRandom());
   describe('noise2D', () => {
+    it('is initialized randomly without arguments', function () {
+      const noise2DA = createNoise2D();
+      const noise2DB = createNoise2D();
+      assert.notEqual(noise2DA(0.1, 0.1), noise2DB(0.0, 0.1));
+    });
     it('should return the same value for the same input', function () {
       assert.equal(noise2D(0.1, 0.2), noise2D(0.1, 0.2));
     });
@@ -86,6 +101,11 @@ describe('createNoise2D', () => {
 describe('createNoise3D', () => {
   const noise3D = createNoise3D(getRandom());
   describe('noise3D', () => {
+    it('is initialized randomly without arguments', function () {
+      const noise3DA = createNoise3D();
+      const noise3DB = createNoise3D();
+      assert.notEqual(noise3DA(0.1, 0.1, 0.1), noise3DB(0.0, 0.1, 0.1));
+    });
     it('should return the same value for the same input', function () {
       assert.equal(noise3D(0.1, 0.2, 0.3), noise3D(0.1, 0.2, 0.3));
     });
@@ -121,6 +141,11 @@ describe('createNoise3D', () => {
 describe('createNoise4D', () => {
   const noise4D = createNoise4D(getRandom());
   describe('noise4D', () => {
+    it('is initialized randomly without arguments', function () {
+      const noise4DA = createNoise4D();
+      const noise4DB = createNoise4D();
+      assert.notEqual(noise4DA(0.1, 0.1, 0.1, 0.1), noise4DB(0.0, 0.1, 0.1, 0.1));
+    });
     it('should return the same value for the same input', function () {
       assert.equal(noise4D(0.1, 0.2, 0.3, 0.4), noise4D(0.1, 0.2, 0.3, 0.4));
     });
