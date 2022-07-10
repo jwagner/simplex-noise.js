@@ -10,14 +10,24 @@ function getRandom(seed = 'seed') {
   return alea(seed);
 }
 
-// TODO improve those
 describe('buildPermutationTable', function () {
-  it('contains all indices exactly once', function () {
+  it('first half contains all indices exactly once', function () {
     const table = buildPermutationTable(getRandom());
-    const aTable = Array.prototype.slice.call(table);
-    for (let i = 0; i < aTable.length / 2; i++) {
-      assert.include(aTable, i);
+    const firstHalf = Array.prototype.slice.call(table, 0, table.length / 2);
+    for (let i = 0; i < firstHalf.length / 2; i++) {
+      assert.include(firstHalf, i);
     }
+  });
+  it('is shuffled', function () {
+    const tableA = buildPermutationTable(getRandom('A'));
+    const tableB = buildPermutationTable(getRandom('B'));
+    assert.notDeepEqual(tableA, tableB);
+  });
+  it('second half mirrors first half', function () {
+    const table = buildPermutationTable(getRandom());
+    const firstHalf = Array.prototype.slice.call(table, 0, table.length / 2);
+    const secondHalf = Array.prototype.slice.call(table, table.length / 2);
+    assert.deepEqual(firstHalf, secondHalf);
   });
   it('can contain 0 in the first position', function () {
     function zero() { return 0; }
