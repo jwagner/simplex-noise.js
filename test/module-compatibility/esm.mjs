@@ -1,2 +1,2 @@
-import {noiseFunction2D} from 'simplex-noise';
-console.log(noiseFunction2D()(1, 2));
+import {createNoise2D} from 'simplex-noise';
+console.log(createNoise2D()(1, 2));

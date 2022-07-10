@@ -28,35 +28,35 @@ Created something awesome with simplex-noise? Let me know so I can add it to the
 
 ```javascript
 // import the noise functions you need
-import { noiseFunction2D } from 'simplex-noise';
+import { createNoise2D } from 'simplex-noise';
 ```
 
 ### CommonJS Require
 
 ```javascript
 // import the noise functions you need
-const { noiseFunction2D } = require('simplex-noise');
+const { createNoise2D } = require('simplex-noise');
 ```
 
 ### 2D
 
 ```javascript
 // initialize the noise function
-const noise2D = noiseFunction2D();
+const noise2D = createNoise2D();
 console.log(noise2D(x, y));
 ```
 
 ### 3D
 
 ```javascript
-const noise3D = noiseFunction3D();
+const noise3D = createNoise3D();
 console.log(noise3D(x, y, z));
 ```
 
 ### 4D
 
 ```javascript
-const noise4D = noiseFunction4D();
+const noise4D = createNoise4D();
 console.log(noise4D(x, y, z, w));
 ```
 
@@ -65,10 +65,15 @@ console.log(noise4D(x, y, z, w));
 By default simplex-noise.js will use Math.random() to seed the noise.
 You can pass in a PRNG function to use your own seed value.
 
+```bash
+# install the alea prng
+npm install -S alea
+```
+
 ```javascript
 import Alea from 'alea';
 // create a new random function based on the seed
-const alea = new Alea('seed');
+const alea = Alea('seed');
 // use the seeded random function to initialize the noise function
 const noise2D = noiseFunction2D(alea);
 console.log(noise2D(x, y));
@@ -107,7 +112,57 @@ There are some simple unit tests for this library to run them
 npm install && npm test
 ```
 
+## Migrating from 3.x to 4.x
+
+### random initialization
+```javascript
+// 3.x
+import SimplexNoise from 'simplex-noise';
+const simplex = new SimplexNoise();
+const value2d = simplex.noise2D(x, y);
+// 4.x
+// import the functions you need
+import { createNoise2D } from 'simplex-noise';
+const noise2D = createNoise2D();
+const value2d = noise2D(x, y);
+```
+
+### Initialization with a seed
+```javascript
+// 3.x
+import SimplexNoise from 'simplex-noise';
+const simplex = new SimplexNoise('seed');
+const value2d = simplex.noise2D(x, y);
+// 4.x
+// npm install -S alea
+import { createNoise2D } from 'simplex-noise';
+import Alea from 'alea';
+const noise2D = createNoise2D(Alea('seed'));
+const value2d = noise2D(x, y);
+
+// IMPORTANT: If you use multiple noise functions (for example 2d and 3d)
+// and want compatible output with 3.x you will need to pass a fresh instance
+// of alea to each create call. If you reuse the alea instance you will
+// get different outputs compared to simplex-noise 3.x.
+const seed = 'seed';
+const noise2D = createNoise2D(Alea(seed));
+const noise3D = createNoise3D(Alea(seed));
+```
+
+### Emulating the 3.x and older API
+```javascript
+const simplex = {
+  noise2D: createNoise2D(Alea(seed)),
+  noise3D: createNoise3D(Alea(seed)),
+  noise4D: createNoise4D(Alea(seed)),
+};
+```
+
 ## Changelog
+
+### 4.0.0
+- Reworked the API so you can import the noise functions individually.
+  When combined with tree-shaking this helps with build sizes.
 
 ### 3.0.1
 - Include simplex-noise.ts as source file, fixes sourcemap warnings.
@@ -159,7 +214,7 @@ you will need to use a polyfill like [typedarray.js](http://www.calormen.com/pol
 
 
 ## License
-Copyright (c) 2021 Jonas Wagner, licensed under the MIT License (enclosed)
+Copyright (c) 2022 Jonas Wagner, licensed under the MIT License (enclosed)
 
 ## Credits
 This is mostly a direct javascript port of the [Java implementation](http://webstaff.itn.liu.se/~stegu/simplexnoise/SimplexNoise.java)
