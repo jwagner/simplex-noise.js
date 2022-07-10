@@ -5,7 +5,6 @@ const {noiseFunction2D, noiseFunction3D, noiseFunction4D} = require('..');
 
 const invocationsPerRun = 8*8*8;
 const rnd = () => new Alea('seed');
-//console.log(rnd()());
 const noise2D = noiseFunction2D(rnd());
 const noise3D = noiseFunction3D(rnd());
 const noise4D = noiseFunction4D(rnd());
@@ -14,15 +13,6 @@ const noise4D = noiseFunction4D(rnd());
 let sideEffect = 0.0;
 
 new Benchmark.Suite('simplex-noise')
-  // .add('init2D', function() {
-  //   noiseFunction2D();
-  // })
-  // .add('init3D', function() {
-  //   noiseFunction3D();
-  // })
-  // .add('init4D', function() {
-  //   noiseFunction4D();
-  // })
   .add('noise2D', function() {
     let a = 0.0;
     for (let x = 0; x < 8; x++) {
