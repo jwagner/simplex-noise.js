@@ -1,4 +1,4 @@
-import { noiseFunction2D, noiseFunction3D, noiseFunction4D } from '../simplex-noise';
+import { createNoise2D, createNoise3D, createNoise4D } from '../simplex-noise';
 import { buildPermutationTable } from '../simplex-noise';
 import alea from 'alea';
 import { assert } from 'chai';
@@ -38,8 +38,8 @@ describe('buildPermutationTable', function () {
   });
 });
 
-describe('noiseFunction2D', () => {
-  const noise2D = noiseFunction2D(getRandom());
+describe('createNoise2D', () => {
+  const noise2D = createNoise2D(getRandom());
   describe('noise2D', () => {
     it('should return the same value for the same input', function () {
       assert.equal(noise2D(0.1, 0.2), noise2D(0.1, 0.2));
@@ -48,11 +48,11 @@ describe('noiseFunction2D', () => {
       assert.notEqual(noise2D(0.1, 0.2), noise2D(0.101, 0.202));
     });
     it('should return the same output with the same seed', function () {
-      const noise2D2 = noiseFunction2D(getRandom());
+      const noise2D2 = createNoise2D(getRandom());
       assert.equal(noise2D(0.1, 0.2), noise2D2(0.1, 0.2));
     });
     it('should return a different output with a different seed', function () {
-      const noise2D2 = noiseFunction2D(getRandom('other seed'));
+      const noise2D2 = createNoise2D(getRandom('other seed'));
       assert.notEqual(noise2D(0.1, 0.2), noise2D2(0.1, 0.2));
     });
     it('should return values between -1 and 1', function () {
@@ -73,8 +73,8 @@ describe('noiseFunction2D', () => {
   });
 });
 
-describe('noiseFunction3D', () => {
-  const noise3D = noiseFunction3D(getRandom());
+describe('createNoise3D', () => {
+  const noise3D = createNoise3D(getRandom());
   describe('noise3D', () => {
     it('should return the same value for the same input', function () {
       assert.equal(noise3D(0.1, 0.2, 0.3), noise3D(0.1, 0.2, 0.3));
@@ -83,11 +83,11 @@ describe('noiseFunction3D', () => {
       assert.notEqual(noise3D(0.1, 0.2, 0.3), noise3D(0.101, 0.202, 0.303));
     });
     it('should return the same output with the same seed', function () {
-      const noise3D2 = noiseFunction3D(getRandom());
+      const noise3D2 = createNoise3D(getRandom());
       assert.equal(noise3D(0.1, 0.2, 0.3), noise3D2(0.1, 0.2, 0.3));
     });
     it('should return a different output with a different seed', function () {
-      const noise3D2 = noiseFunction3D(getRandom('other seed'));
+      const noise3D2 = createNoise3D(getRandom('other seed'));
       assert.notEqual(noise3D(0.1, 0.2, 0.3), noise3D2(0.1, 0.2, 0.3));
     });
     it('should return values between -1 and 1', function () {
@@ -108,8 +108,8 @@ describe('noiseFunction3D', () => {
   });
 });
 
-describe('noiseFunction4D', () => {
-  const noise4D = noiseFunction4D(getRandom());
+describe('createNoise4D', () => {
+  const noise4D = createNoise4D(getRandom());
   describe('noise4D', () => {
     it('should return the same value for the same input', function () {
       assert.equal(noise4D(0.1, 0.2, 0.3, 0.4), noise4D(0.1, 0.2, 0.3, 0.4));
@@ -118,11 +118,11 @@ describe('noiseFunction4D', () => {
       assert.notEqual(noise4D(0.1, 0.2, 0.3, 0.4), noise4D(0.101, 0.202, 0.303, 0.404));
     });
     it('should return the same output with the same seed', function () {
-      const noise4D2 = noiseFunction4D(getRandom());
+      const noise4D2 = createNoise4D(getRandom());
       assert.equal(noise4D(0.1, 0.2, 0.3, 0.4), noise4D2(0.1, 0.2, 0.3, 0.4));
     });
     it('should return a different output with a different seed', function () {
-      const noise4D2 = noiseFunction4D(getRandom('other seed'));
+      const noise4D2 = createNoise4D(getRandom('other seed'));
       assert.notEqual(noise4D(0.1, 0.2, 0.3, 0.4), noise4D2(0.1, 0.2, 0.3, 0.4));
     });
     it('should return values between -1 and 1', function () {

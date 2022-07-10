@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const noiseFunction2D = require('simplex-noise').noiseFunction2D;
+/* eslint-disable @typescript-eslint/no-var-requires */
+const createNoise2D = require('simplex-noise').createNoise2D;
 console.log(require('simplex-noise'));
-console.log(noiseFunction2D()(1, 2));
+console.log(createNoise2D()(1, 2));

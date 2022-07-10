@@ -77,7 +77,7 @@ export type NoiseFunction2D = (x: number, y: number) => number;
  * @param random the random function that will be used to build the permutation table
  * @returns {NoiseFunction2D}
  */
-export function noiseFunction2D(random: RandomFn = Math.random): NoiseFunction2D {
+export function createNoise2D(random: RandomFn = Math.random): NoiseFunction2D {
   const perm = buildPermutationTable(random);
   const permMod12 = perm.map(v => v % 12);
   return function noise2D(x: number, y: number): number {
@@ -153,7 +153,7 @@ export type NoiseFunction3D = (x: number, y: number, z: number) => number;
  * @param random the random function that will be used to build the permutation table
  * @returns {NoiseFunction3D}
  */
-export function noiseFunction3D(random: RandomFn = Math.random): NoiseFunction3D {
+export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
   const perm = buildPermutationTable(random);
   const permMod12 = perm.map(v => v % 12);
 
@@ -294,7 +294,7 @@ export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => nu
  * @param random the random function that will be used to build the permutation table
  * @returns {NoiseFunction3D}
  */
-export function noiseFunction4D(random: RandomFn = Math.random) {
+export function createNoise4D(random: RandomFn = Math.random) {
   const perm = buildPermutationTable(random);
   return function noise4D(x: number, y: number, z: number, w: number): number {
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
