@@ -1,20 +1,21 @@
-# simplex-noise.js
+[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
+
+![simplex-noise.js header](./doc/github-header-fs8.png)
 
 [API Documentation](https://29a.ch/simplex-noise/docs/classes/SimplexNoise.html)
 
-[![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
-
 
 simplex-noise.js is a simplex noise implementation in Javascript/TypeScript.
-It works in the browser and nodejs. Using Commonjs and ES Modules.
+It works in the browser and nodejs, using Commonjs and ES Modules.
 It is self contained (dependency free), relatively small (about 2k minified and gzipped)
-and fairly fast (about 20 nanoseconds for a sample of 2d noise).
+and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeable.
 
 ## Demos
 
+- [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
 - Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
-- [3D voxel world generation](http://29a.ch/sandbox/2012/voxelworld/) example.
-- Film grain in [analog film emulator](http://29a.ch/film-emulator/).
+- [3D voxel world generation](https://29a.ch/sandbox/2012/voxelworld/) example.
+- Film grain in [analog film emulator](https://29a.ch/film-emulator/).
 
 Created something awesome with simplex-noise? Let me know so I can add it to the list.
 
@@ -71,11 +72,11 @@ npm install -S alea
 ```
 
 ```javascript
-import Alea from 'alea';
+import alea from 'alea';
 // create a new random function based on the seed
-const alea = Alea('seed');
+const prng = alea('seed');
 // use the seeded random function to initialize the noise function
-const noise2D = noiseFunction2D(alea);
+const noise2D = createNoise2D(prng);
 console.log(noise2D(x, y));
 ```
 
@@ -105,13 +106,6 @@ simplex-noise noise4D: 22,578,593 ops/sec ±0%
 fast-simplex-noise noise4D: 5,292,975 ops/sec ±0%
 ```
 
-## Tests
-
-There are some simple unit tests for this library to run them
-```shell
-npm install && npm test
-```
-
 ## Migrating from 3.x to 4.x
 
 ### random initialization
@@ -136,7 +130,7 @@ const value2d = simplex.noise2D(x, y);
 // 4.x
 // npm install -S alea
 import { createNoise2D } from 'simplex-noise';
-import Alea from 'alea';
+import alea from 'alea';
 const noise2D = createNoise2D(Alea('seed'));
 const value2d = noise2D(x, y);
 
@@ -145,16 +139,16 @@ const value2d = noise2D(x, y);
 // of alea to each create call. If you reuse the alea instance you will
 // get different outputs compared to simplex-noise 3.x.
 const seed = 'seed';
-const noise2D = createNoise2D(Alea(seed));
-const noise3D = createNoise3D(Alea(seed));
+const noise2D = createNoise2D(alea(seed));
+const noise3D = createNoise3D(alea(seed));
 ```
 
 ### Emulating the 3.x and older API
 ```javascript
 const simplex = {
-  noise2D: createNoise2D(Alea(seed)),
-  noise3D: createNoise3D(Alea(seed)),
-  noise4D: createNoise4D(Alea(seed)),
+  noise2D: createNoise2D(alea(seed)),
+  noise3D: createNoise3D(alea(seed)),
+  noise4D: createNoise4D(alea(seed)),
 };
 ```
 
@@ -163,6 +157,9 @@ const simplex = {
 ### 4.0.0
 - Reworked the API so you can import the noise functions individually.
   When combined with tree-shaking this helps with build sizes.
+- Removed the built in version of the alea PRNG to focus the library to do only one thing.
+   If you want to continue to use it you'll have to install and import it separately.
+- Test coverage is now at 100%
 
 ### 3.0.1
 - Include simplex-noise.ts as source file, fixes sourcemap warnings.
