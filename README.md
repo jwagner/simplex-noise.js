@@ -12,7 +12,7 @@ and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeab
 
 ## Demos
 
-- [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
+- [Synth Wave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
 - Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
 - [3D voxel world generation](https://29a.ch/sandbox/2012/voxelworld/) example.
 - Film grain in [analog film emulator](https://29a.ch/film-emulator/).
@@ -202,13 +202,6 @@ In the future such changes will be released as a new major version.
 
 ### 1.0.0
 - Initial Release
-
-
-## Requirements
-
-It requires typed arrays. If you want to use it in browsers without support
-you will need to use a polyfill like [typedarray.js](http://www.calormen.com/polyfill/typedarray.js).
-
 
 ## License
 Copyright (c) 2022 Jonas Wagner, licensed under the MIT License (enclosed)
