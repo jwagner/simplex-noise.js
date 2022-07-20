@@ -4,7 +4,7 @@ import alea from 'alea';
 import { assert } from 'chai';
 
 
-import { assertMatchesImage, sampleFunctionToImageData } from './matches-snapshot';
+import { assertMatchesImage, sampleFunctionToImageDataOne } from './matches-snapshot';
 
 function getRandom(seed = 'seed') {
   return alea(seed);
@@ -91,9 +91,20 @@ describe('createNoise2D', () => {
     it('should return similar values for similar inputs', function () {
       assert(Math.abs(noise2D(0.1, 0.2) - noise2D(0.101, 0.202)) < 0.1);
     });
-    it('should match snapshot', function () {
-      const actual = sampleFunctionToImageData((x, y) => noise2D(x / 10, y / 10) * 128 + 128, 64, 64);
-      assertMatchesImage(actual, 'noise2D.png');
+    it('should match snapshot for small inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise2D(x * 2, y * 2), size, size);
+      assertMatchesImage(actual, 'noise2Dsmall.png');
+    });
+    it('should match snapshot for large inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise2D(x * 1000, y * 1000), size, size);
+      assertMatchesImage(actual, 'noise2Dlarge.png');
+    });
+    it('should match snapshot for gigantic inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise2D(x * 5e9, y * 5e9), size, size);
+      assertMatchesImage(actual, 'noise2Dgiga.png');
     });
   });
 });
@@ -131,9 +142,15 @@ describe('createNoise3D', () => {
     it('should return similar values for similar inputs', function () {
       assert(Math.abs(noise3D(0.1, 0.2, 0.3) - noise3D(0.101, 0.202, 0.303)) < 0.1);
     });
-    it('should match snapshot', function () {
-      const actual = sampleFunctionToImageData((x, y) => noise3D(x / 10, y / 10, (x + y) / 2) * 128 + 128, 64, 64);
-      assertMatchesImage(actual, 'noise3D.png');
+    it('should match snapshot for small inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise3D(x * 2, y * 2, (x + y)), size, size);
+      assertMatchesImage(actual, 'noise3Dsmall.png');
+    });
+    it('should match snapshot for large inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise3D(x * 1000, y * 1000, (x + y) * 500), size, size);
+      assertMatchesImage(actual, 'noise3Dlarge.png');
     });
   });
 });
@@ -171,9 +188,15 @@ describe('createNoise4D', () => {
     it('should return similar values for similar inputs', function () {
       assert(Math.abs(noise4D(0.1, 0.2, 0.3, 0.4) - noise4D(0.101, 0.202, 0.303, 0.404)) < 0.1);
     });
-    it('should match snapshot', function () {
-      const actual = sampleFunctionToImageData((x, y) => noise4D(x / 10, y / 10, x / 4, y / 3) * 128 + 128, 64, 64);
-      assertMatchesImage(actual, 'noise4D.png');
+    it('should match snapshot for small inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise4D(x * 2, y * 2, x + y, x - y), size, size);
+      assertMatchesImage(actual, 'noise4Dsmall.png');
+    });
+    it('should match snapshot for large inputs', function () {
+      const size = 64;
+      const actual = sampleFunctionToImageDataOne((x, y) => noise4D(x * 1000, y * 1000, (x + y) * 500, (x - y) * 500), size, size);
+      assertMatchesImage(actual, 'noise4Dlarge.png');
     });
   });
 });

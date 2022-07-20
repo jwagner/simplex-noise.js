@@ -77,6 +77,6 @@
     "build": "./build.sh",
     "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
     "prepare": "npm run-script build",
-    "benchmark": "parcel build && node ./perf/benchmark.js"
+    "benchmark": "npm run build && cd perf && ./benchmark.sh"
   }
 }
