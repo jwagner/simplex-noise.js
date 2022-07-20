@@ -12,7 +12,7 @@ and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeab
 
 ## Demos
 
-- [Synth Wave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
+- [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
 - Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
 - [3D voxel world generation](https://29a.ch/sandbox/2012/voxelworld/) example.
 - Film grain in [analog film emulator](https://29a.ch/film-emulator/).
@@ -90,11 +90,9 @@ So ~20 nanoseconds per call.
 
 ```
 $ node perf/index.js
-27745787.933336906
-init: 192,590 ops/sec ±1%
-noise2D: 57,928,891 ops/sec ±1%
-noise3D: 34,159,230 ops/sec ±0%
-noise4D: 24,589,786 ops/sec ±0%
+noise2D: 66,608,762 ops/sec ±0% 
+noise3D: 41,059,121 ops/sec ±0% 
+noise4D: 33,406,638 ops/sec ±0% 
 ```
 
 At least at a glance it also seems to be faster than 'fast-simplex-noise':
@@ -159,6 +157,8 @@ const simplex = {
   When combined with tree-shaking this helps with build sizes.
 - Removed the built in version of the alea PRNG to focus the library to do only one thing.
    If you want to continue to use it you'll have to install and import it separately.
+- Noise functions are a bit faster (~ 10-20%) due to using integers in some places
+- Noise values can be different from previous versions especially for inputs > 2^31
 - Test coverage is now at 100%
 
 ### 3.0.1

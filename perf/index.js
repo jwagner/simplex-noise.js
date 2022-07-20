@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const Benchmark = require('benchmark');
 const Alea = require('alea');
-const {noiseFunction2D, noiseFunction3D, noiseFunction4D} = require('..');
+const {createNoise2D, createNoise3D, createNoise4D} = require('..');
 
 const invocationsPerRun = 8*8*8;
 const rnd = () => new Alea('seed');
-const noise2D = noiseFunction2D(rnd());
-const noise3D = noiseFunction3D(rnd());
-const noise4D = noiseFunction4D(rnd());
+const noise2D = createNoise2D(rnd());
+const noise3D = createNoise3D(rnd());
+const noise4D = createNoise4D(rnd());
 
 // prevent the compiler from optimizing away the calls
 let sideEffect = 0.0;
@@ -23,7 +23,7 @@ new Benchmark.Suite('simplex-noise')
       }
     }
     sideEffect += a;
-  })
+  }, {minTime: 30})
   .add('noise3D', function() {
     let a = 0.0;
     for (let x = 0; x < 8; x++) {
@@ -58,4 +58,4 @@ new Benchmark.Suite('simplex-noise')
       );
     });
   })
-  .run({delay: 10, minTime: 20, maxTime: 25});
+  .run({delay: 10, minTime: 50, maxTime: 120, minSamples: 10000});

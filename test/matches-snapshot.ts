@@ -69,3 +69,9 @@ export function sampleFunctionToImageData(f: SampleFunction, width: number, heig
   }
   return imageData;
 }
+
+// same as sampleFunctionToImageData but x and y go from -1 .. 1 instead of 0 .. width
+// output is scaled from -1 .. 1 to 0 .. 255
+export function sampleFunctionToImageDataOne(f: SampleFunction, width: number, height: number): ImageDataLike {
+  return sampleFunctionToImageData((x, y) => f(x / width * 2 - 1, y / height * 2 - 1) * 128 + 127, width, height);
+}
