@@ -158,7 +158,8 @@ const simplex = {
 - Removed the built in version of the alea PRNG to focus the library to do only one thing.
    If you want to continue to use it you'll have to install and import it separately.
 - Noise functions are a bit faster (~ 10-20%) due to using integers in some places
-- Noise values can be different from previous versions especially for inputs > 2^31
+- Noise values can be different from previous versions
+- Inputs coordinates bigger than 2^31 may not result in a noisy output anymore.
 - Test coverage is now at 100%
 
 ### 3.0.1

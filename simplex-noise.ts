@@ -90,6 +90,8 @@ export type RandomFn = () => number;
 
 /**
  * Samples the noise field in two dimensions
+ * 
+ * Coordinates should be finite, bigger than -2^31 and smaller than 2^31.
  * @param x
  * @param y
  * @returns a number in the interval [-1, 1]
@@ -177,6 +179,8 @@ export function createNoise2D(random: RandomFn = Math.random): NoiseFunction2D {
 
 /**
  * Samples the noise field in three dimensions
+ * 
+ * Coordinates should be finite, bigger than -2^31 and smaller than 2^31.
  * @param x
  * @param y
  * @param z
@@ -315,6 +319,8 @@ export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
 
 /**
  * Samples the noise field in four dimensions
+ * 
+ * Coordinates should be finite, bigger than -2^31 and smaller than 2^31.
  * @param x
  * @param y
  * @param z
