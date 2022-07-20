@@ -5,3 +5,6 @@
 /public
 /coverage
 /.nyc_output
+/perf/*.log
+/perf/*.cfg
+/perf/*.json
