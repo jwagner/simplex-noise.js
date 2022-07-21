@@ -1,8 +1,8 @@
 [![Tests](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml/badge.svg)](https://github.com/jwagner/simplex-noise.js/actions/workflows/tests.yml) [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 
 ![simplex-noise.js header](./doc/github-header-fs8.png)
-
-[API Documentation](https://29a.ch/simplex-noise/docs/classes/SimplexNoise.html)
+http://localhost:8000/docs/modules.html
+[API Documentation](https://29a.ch/simplex-noise/docs/modules.html)
 
 
 simplex-noise.js is a simplex noise implementation in Javascript/TypeScript.
