@@ -75,7 +75,7 @@
     "test": "eslint simplex-noise.ts && nyc mocha && ./test/module-compatibility.sh",
     "coverage": "nyc report",
     "build": "./build.sh",
-    "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts",
+    "docs": "typedoc --excludePrivate --out public/docs simplex-noise.ts && cp -R doc public/docs/",
     "prepare": "npm run-script build",
     "benchmark": "npm run build && cd perf && ./benchmark.sh"
   }
