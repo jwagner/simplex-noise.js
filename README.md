@@ -85,23 +85,13 @@ The ALEA PRNG used in the example above can be found in the [alea](https://npmjs
 ## Benchmarks
 
 simplex-noise.js is reasonably quick.
-According to `perf/benchmark.js` I can perform about 50 million `noise2D()` calls/second on a single thread on my desktop (Ryzen 5950X).
-So ~20 nanoseconds per call.
+According to `perf/index.js` I can perform about 70 million `noise2D()` calls/second on a single thread on my desktop (Ryzen 5950X).
 
 ```
 $ node perf/index.js
-noise2D: 66,608,762 ops/sec ±0% 
-noise3D: 41,059,121 ops/sec ±0% 
-noise4D: 33,406,638 ops/sec ±0% 
-```
-
-At least at a glance it also seems to be faster than 'fast-simplex-noise':
-```
-simplex-noise noise2D: 53,429,815 ops/sec ±0%
-fast-simplex-noise noise2D: 6,239,845 ops/sec ±0%
-
-simplex-noise noise4D: 22,578,593 ops/sec ±0%
-fast-simplex-noise noise4D: 5,292,975 ops/sec ±0%
+noise2D: 72,916,215 ops/sec ±1%
+noise3D: 47,855,199 ops/sec ±0%
+noise4D: 35,564,111 ops/sec ±0%
 ```
 
 ## Migrating from 3.x to 4.x
@@ -157,10 +147,11 @@ const simplex = {
   When combined with tree-shaking this helps with build sizes.
 - Removed the built in version of the alea PRNG to focus the library to do only one thing.
    If you want to continue to use it you'll have to install and import it separately.
-- Noise functions are a bit faster (~ 10-20%) due to using integers in some places
+- Noise functions are a bit faster (~ 20 - 30%).
 - Noise values can be different from previous versions
 - Inputs coordinates bigger than 2^31 may not result in a noisy output anymore.
-- Test coverage is now at 100%
+  If you have a usecase that is affected this please file an issue.
+- Test coverage is now at 100%.
 
 ### 3.0.1
 - Include simplex-noise.ts as source file, fixes sourcemap warnings.
