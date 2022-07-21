@@ -14,4 +14,5 @@ module.exports = {
     filename: '[name].html',
     title: 'Simplex-Noise.js examples'
   })],
+  mode: 'production'
 };

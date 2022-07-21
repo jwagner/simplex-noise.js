@@ -1,11 +1,11 @@
-import {noiseFunction3D} from 'simplex-noise';
+import {createNoise3D} from 'simplex-noise';
 
 const canvas =  document.createElement('canvas');
 canvas.width = 512;
 canvas.height = 512;
 document.body.appendChild(canvas);
 
-const noise3D = noiseFunction3D(),
+const noise3D = createNoise3D(),
   ctx = canvas.getContext('2d'),
   imgdata = ctx.getImageData(0, 0, canvas.width, canvas.height),
   width = imgdata.width,
