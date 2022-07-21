@@ -195,6 +195,10 @@ export type NoiseFunction3D = (x: number, y: number, z: number) => number;
  */
 export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
   const perm = buildPermutationTable(random);
+  // precalculating these seems to yield a speedup of over 15%
+  const permGrad3x = new Float64Array(perm).map(v => grad3[(v % 12) * 3]);
+  const permGrad3y = new Float64Array(perm).map(v => grad3[(v % 12) * 3 + 1]);
+  const permGrad3z = new Float64Array(perm).map(v => grad3[(v % 12) * 3 + 2]);
   return function noise3D(x: number, y: number, z: number): number {
     let n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
@@ -286,30 +290,30 @@ export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
     let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
     if (t0 < 0) n0 = 0.0;
     else {
-      const gi0 = (perm[ii + perm[jj + perm[kk]]] % 12) * 3;
+      const gi0 = ii + perm[jj + perm[kk]];
       t0 *= t0;
-      n0 = t0 * t0 * (grad3[gi0] * x0 + grad3[gi0 + 1] * y0 + grad3[gi0 + 2] * z0);
+      n0 = t0 * t0 * (permGrad3x[gi0] * x0 + permGrad3y[gi0] * y0 + permGrad3z[gi0] * z0);
     }
     let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
     if (t1 < 0) n1 = 0.0;
     else {
-      const gi1 = (perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12) * 3;
+      const gi1 = ii + i1 + perm[jj + j1 + perm[kk + k1]];
       t1 *= t1;
-      n1 = t1 * t1 * (grad3[gi1] * x1 + grad3[gi1 + 1] * y1 + grad3[gi1 + 2] * z1);
+      n1 = t1 * t1 * (permGrad3x[gi1] * x1 + permGrad3y[gi1] * y1 + permGrad3z[gi1] * z1);
     }
     let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
     if (t2 < 0) n2 = 0.0;
     else {
-      const gi2 = (perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12) * 3;
+      const gi2 = ii + i2 + perm[jj + j2 + perm[kk + k2]];
       t2 *= t2;
-      n2 = t2 * t2 * (grad3[gi2] * x2 + grad3[gi2 + 1] * y2 + grad3[gi2 + 2] * z2);
+      n2 = t2 * t2 * (permGrad3x[gi2] * x2 + permGrad3y[gi2] * y2 + permGrad3z[gi2] * z2);
     }
     let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
     if (t3 < 0) n3 = 0.0;
     else {
-      const gi3 = (perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12) * 3;
+      const gi3 = ii + 1 + perm[jj + 1 + perm[kk + 1]];
       t3 *= t3;
-      n3 = t3 * t3 * (grad3[gi3] * x3 + grad3[gi3 + 1] * y3 + grad3[gi3 + 2] * z3);
+      n3 = t3 * t3 * (permGrad3x[gi3] * x3 + permGrad3y[gi3] * y3 + permGrad3z[gi3] * z3);
     }
     // Add contributions from each corner to get the final noise value.
     // The result is scaled to stay just inside [-1,1]
@@ -336,6 +340,11 @@ export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => nu
  */
 export function createNoise4D(random: RandomFn = Math.random) {
   const perm = buildPermutationTable(random);
+  // precalculating these leads to a ~10% speedup
+  const permGrad4x = new Float64Array(perm).map(v => grad4[(v % 32) * 4]);
+  const permGrad4y = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 1]);
+  const permGrad4z = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 2]);
+  const permGrad4w = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 3]);
   return function noise4D(x: number, y: number, z: number, w: number): number {
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
     // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
@@ -424,37 +433,37 @@ export function createNoise4D(random: RandomFn = Math.random) {
     let t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
     if (t0 < 0) n0 = 0.0;
     else {
-      const gi0 = (perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32) * 4;
+      const gi0 = ii + perm[jj + perm[kk + perm[ll]]];
       t0 *= t0;
-      n0 = t0 * t0 * (grad4[gi0] * x0 + grad4[gi0 + 1] * y0 + grad4[gi0 + 2] * z0 + grad4[gi0 + 3] * w0);
+      n0 = t0 * t0 * (permGrad4x[gi0] * x0 + permGrad4y[gi0] * y0 + permGrad4z[gi0] * z0 + permGrad4w[gi0] * w0);
     }
     let t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
     if (t1 < 0) n1 = 0.0;
     else {
-      const gi1 = (perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32) * 4;
+      const gi1 = ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]];
       t1 *= t1;
-      n1 = t1 * t1 * (grad4[gi1] * x1 + grad4[gi1 + 1] * y1 + grad4[gi1 + 2] * z1 + grad4[gi1 + 3] * w1);
+      n1 = t1 * t1 * (permGrad4x[gi1] * x1 + permGrad4y[gi1] * y1 + permGrad4z[gi1] * z1 + permGrad4w[gi1] * w1);
     }
     let t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
     if (t2 < 0) n2 = 0.0;
     else {
-      const gi2 = (perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32) * 4;
+      const gi2 = ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]];
       t2 *= t2;
-      n2 = t2 * t2 * (grad4[gi2] * x2 + grad4[gi2 + 1] * y2 + grad4[gi2 + 2] * z2 + grad4[gi2 + 3] * w2);
+      n2 = t2 * t2 * (permGrad4x[gi2] * x2 + permGrad4y[gi2] * y2 + permGrad4z[gi2] * z2 + permGrad4w[gi2] * w2);
     }
     let t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
     if (t3 < 0) n3 = 0.0;
     else {
-      const gi3 = (perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32) * 4;
+      const gi3 = ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]];
       t3 *= t3;
-      n3 = t3 * t3 * (grad4[gi3] * x3 + grad4[gi3 + 1] * y3 + grad4[gi3 + 2] * z3 + grad4[gi3 + 3] * w3);
+      n3 = t3 * t3 * (permGrad4x[gi3] * x3 + permGrad4y[gi3] * y3 + permGrad4z[gi3] * z3 + permGrad4w[gi3] * w3);
     }
     let t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
     if (t4 < 0) n4 = 0.0;
     else {
-      const gi4 = (perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32) * 4;
+      const gi4 = ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]];
       t4 *= t4;
-      n4 = t4 * t4 * (grad4[gi4] * x4 + grad4[gi4 + 1] * y4 + grad4[gi4 + 2] * z4 + grad4[gi4 + 3] * w4);
+      n4 = t4 * t4 * (permGrad4x[gi4] * x4 + permGrad4y[gi4] * y4 + permGrad4z[gi4] * z4 + permGrad4w[gi4] * w4);
     }
     // Sum up and scale the result to cover the range [-1,1]
     return 27.0 * (n0 + n1 + n2 + n3 + n4);
