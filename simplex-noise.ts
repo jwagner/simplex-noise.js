@@ -28,10 +28,63 @@ Better rank ordering method by Stefan Gustavson in 2012.
  */
 
 
+// these #__PURE__ comments help uglifyjs with dead code removal
+// 
+const F2 = /*#__PURE__*/ 0.5 * (Math.sqrt(3.0) - 1.0);
+const G2 = /*#__PURE__*/ (3.0 - Math.sqrt(3.0)) / 6.0;
+const F3 = 1.0 / 3.0;
+const G3 = 1.0 / 6.0;
+const F4 = /*#__PURE__*/ (Math.sqrt(5.0) - 1.0) / 4.0;
+const G4 = /*#__PURE__*/ (5.0 - Math.sqrt(5.0)) / 20.0;
+
 // I'm really not sure why this | 0 (basically a coercion to int)
 // is making this faster but I get ~5 million ops/sec more on the
 // benchmarks across the board or a ~10% speedup.
 const fastFloor = (x: number) => Math.floor(x) | 0;
+
+const grad2 = /*#__PURE__*/ new Float64Array([1, 1,
+  -1, 1,
+  1, -1,
+
+  -1, -1,
+  1, 0,
+  -1, 0,
+
+  1, 0,
+  -1, 0,
+  0, 1,
+
+  0, -1,
+  0, 1,
+  0, -1]);
+
+// double seems to be faster than single or int's
+// probably because most operations are in double precision
+const grad3 = /*#__PURE__*/ new Float64Array([1, 1, 0,
+  -1, 1, 0,
+  1, -1, 0,
+
+  -1, -1, 0,
+  1, 0, 1,
+  -1, 0, 1,
+
+  1, 0, -1,
+  -1, 0, -1,
+  0, 1, 1,
+
+  0, -1, 1,
+  0, 1, -1,
+  0, -1, -1]);
+
+// double is a bit quicker here as well
+const grad4 = /*#__PURE__*/ new Float64Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1,
+  0, -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1,
+  1, 0, 1, 1, 1, 0, 1, -1, 1, 0, -1, 1, 1, 0, -1, -1,
+  -1, 0, 1, 1, -1, 0, 1, -1, -1, 0, -1, 1, -1, 0, -1, -1,
+  1, 1, 0, 1, 1, 1, 0, -1, 1, -1, 0, 1, 1, -1, 0, -1,
+  -1, 1, 0, 1, -1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, -1,
+  1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
+  -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]);
 
 /**
  * A random() function, must return a number in the interval [0,1), just like Math.random().
@@ -54,27 +107,7 @@ export type NoiseFunction2D = (x: number, y: number) => number;
  * @returns {NoiseFunction2D}
  */
 export function createNoise2D(random: RandomFn = Math.random): NoiseFunction2D {
-  const F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
-  const G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
-
   const perm = buildPermutationTable(random);
-  // these consts are moved in here to help webpack with treeshaking
-  const grad2 = new Float64Array([1, 1,
-    -1, 1,
-    1, -1,
-
-    -1, -1,
-    1, 0,
-    -1, 0,
-
-    1, 0,
-    -1, 0,
-    0, 1,
-
-    0, -1,
-    0, 1,
-    0, -1]);
-
   // precalculating this yields a little ~3% performance improvement.
   const permGrad2x = new Float64Array(perm).map(v => grad2[(v % 12) * 2]);
   const permGrad2y = new Float64Array(perm).map(v => grad2[(v % 12) * 2 + 1]);
@@ -164,28 +197,7 @@ export type NoiseFunction3D = (x: number, y: number, z: number) => number;
  * @returns {NoiseFunction3D}
  */
 export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
-  const F3 = 1.0 / 3.0;
-  const G3 = 1.0 / 6.0;
-
   const perm = buildPermutationTable(random);
-  // double seems to be faster than single or int's
-  // probably because most operations are in double precision
-  const grad3 = new Float64Array([1, 1, 0,
-    -1, 1, 0,
-    1, -1, 0,
-
-    -1, -1, 0,
-    1, 0, 1,
-    -1, 0, 1,
-
-    1, 0, -1,
-    -1, 0, -1,
-    0, 1, 1,
-
-    0, -1, 1,
-    0, 1, -1,
-    0, -1, -1]);
-
   // precalculating these seems to yield a speedup of over 15%
   const permGrad3x = new Float64Array(perm).map(v => grad3[(v % 12) * 3]);
   const permGrad3y = new Float64Array(perm).map(v => grad3[(v % 12) * 3 + 1]);
@@ -330,20 +342,8 @@ export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => nu
  * @returns {NoiseFunction3D}
  */
 export function createNoise4D(random: RandomFn = Math.random) {
-  const F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
-  const G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
-
   const perm = buildPermutationTable(random);
   // precalculating these leads to a ~10% speedup
-  // double is a bit quicker here as well
-  const grad4 = new Float64Array([0, 1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1,
-    0, -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1,
-    1, 0, 1, 1, 1, 0, 1, -1, 1, 0, -1, 1, 1, 0, -1, -1,
-    -1, 0, 1, 1, -1, 0, 1, -1, -1, 0, -1, 1, -1, 0, -1, -1,
-    1, 1, 0, 1, 1, 1, 0, -1, 1, -1, 0, 1, 1, -1, 0, -1,
-    -1, 1, 0, 1, -1, 1, 0, -1, -1, -1, 0, 1, -1, -1, 0, -1,
-    1, 1, 1, 0, 1, 1, -1, 0, 1, -1, 1, 0, 1, -1, -1, 0,
-    -1, 1, 1, 0, -1, 1, -1, 0, -1, -1, 1, 0, -1, -1, -1, 0]);
   const permGrad4x = new Float64Array(perm).map(v => grad4[(v % 32) * 4]);
   const permGrad4y = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 1]);
   const permGrad4z = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 2]);
