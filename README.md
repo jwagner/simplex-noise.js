@@ -152,6 +152,8 @@ const simplex = {
 - Input coordinates bigger than 2^31 may not result in a noisy output anymore.
   If you have a use case that is affected by this change, please file an issue.
 - Test coverage is now at 100%.
+- A big thank you to @mreinstein, @redblobgames and everyone else involved
+  for their comments and PRs which motivated me to create this new version.
 
 ### 3.0.1
 - Include simplex-noise.ts as source file, fixes sourcemap warnings.
