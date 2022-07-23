@@ -142,6 +142,8 @@ const simplex = {
 ## Changelog
 
 ### 4.0.0
+:warning: **This release changes the API and the output of the noise functions.** :warning:
+
 - Reworked the API so that the noise functions can be imported individually.
   When combined with tree shaking this helps with build sizes.
 - Removed the built in version of the ALEA PRNG to focus the library to do only one thing.
