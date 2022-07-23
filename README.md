@@ -9,12 +9,13 @@ It works in the browser and Node.js, using CommonJS and ES Modules.
 It is self-contained (dependency-free), relatively small (about 2k minified and gzipped)
 and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeable.
 
-## Demos
+## Demos & Real World Examples
 
-- [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header 
-- Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001).
-- [3D voxel world generation](https://29a.ch/sandbox/2012/voxelworld/) example.
-- Film grain in [analog film emulator](https://29a.ch/film-emulator/).
+- [Synthwave Demo](https://29a.ch/sandbox/2022/simplex-noise-synthwave/) shown in the header
+- Simple 2D plasma on [codepen.io](http://codepen.io/jwagner/pen/BNmpdm/?editors=001)
+- [3D voxel world generation](https://29a.ch/sandbox/2012/voxelworld/) example
+- Film grain in [analog film emulator](https://29a.ch/film-emulator/)
+- [Applying volumetric wood grain to 3D prints](https://29a.ch/sandbox/2021/3d-print-texturizer/)
 
 Created something awesome with simplex-noise? Let me know so I can add it to the list.
 
