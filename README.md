@@ -6,8 +6,8 @@ http://localhost:8000/docs/modules.html
 
 
 simplex-noise.js is a simplex noise implementation in Javascript/TypeScript.
-It works in the browser and nodejs, using Commonjs and ES Modules.
-It is self contained (dependency free), relatively small (about 2k minified and gzipped)
+It works in the browser and Node.js, using CommonJS and ES Modules.
+It is self-contained (dependency-free), relatively small (about 2k minified and gzipped)
 and fairly fast (about 20 nanoseconds for a sample of 2d noise) and tree shakeable.
 
 ## Demos
@@ -143,14 +143,14 @@ const simplex = {
 ## Changelog
 
 ### 4.0.0
-- Reworked the API so you can import the noise functions individually.
-  When combined with tree-shaking this helps with build sizes.
-- Removed the built in version of the alea PRNG to focus the library to do only one thing.
+- Reworked the API so that the noise functions can be imported individually.
+  When combined with tree shaking this helps with build sizes.
+- Removed the built in version of the ALEA PRNG to focus the library to do only one thing.
    If you want to continue to use it you'll have to install and import it separately.
 - Noise functions are a bit faster (~ 20 - 30%).
 - Noise values can be different from previous versions
-- Inputs coordinates bigger than 2^31 may not result in a noisy output anymore.
-  If you have a usecase that is affected this please file an issue.
+- Input coordinates bigger than 2^31 may not result in a noisy output anymore.
+  If you have a use case that is affected by this change, please file an issue.
 - Test coverage is now at 100%.
 
 ### 3.0.1
