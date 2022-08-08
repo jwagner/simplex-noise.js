@@ -37,11 +37,6 @@ const G3 = 1.0 / 6.0;
 const F4 = /*#__PURE__*/ (Math.sqrt(5.0) - 1.0) / 4.0;
 const G4 = /*#__PURE__*/ (5.0 - Math.sqrt(5.0)) / 20.0;
 
-// I'm really not sure why this | 0 (basically a coercion to int)
-// is making this faster but I get ~5 million ops/sec more on the
-// benchmarks across the board or a ~10% speedup.
-const fastFloor = (x: number) => Math.floor(x) | 0;
-
 const grad2 = /*#__PURE__*/ new Float64Array([1, 1,
   -1, 1,
   1, -1,
@@ -118,8 +113,8 @@ export function createNoise2D(random: RandomFn = Math.random): NoiseFunction2D {
     let n2 = 0;
     // Skew the input space to determine which simplex cell we're in
     const s = (x + y) * F2; // Hairy factor for 2D
-    const i = fastFloor(x + s);
-    const j = fastFloor(y + s);
+    const i = x + s | 0;
+    const j = y + s | 0;
     const t = (i + j) * G2;
     const X0 = i - t; // Unskew the cell origin back to (x,y) space
     const Y0 = j - t;
@@ -206,9 +201,9 @@ export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
     let n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
     const s = (x + y + z) * F3; // Very nice and simple skew factor for 3D
-    const i = fastFloor(x + s);
-    const j = fastFloor(y + s);
-    const k = fastFloor(z + s);
+    const i = x + s | 0;
+    const j = y + s | 0;
+    const k = z + s | 0;
     const t = (i + j + k) * G3;
     const X0 = i - t; // Unskew the cell origin back to (x,y,z) space
     const Y0 = j - t;
@@ -352,10 +347,10 @@ export function createNoise4D(random: RandomFn = Math.random) {
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
     // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
     const s = (x + y + z + w) * F4; // Factor for 4D skewing
-    const i = fastFloor(x + s);
-    const j = fastFloor(y + s);
-    const k = fastFloor(z + s);
-    const l = fastFloor(w + s);
+    const i = x + s | 0;
+    const j = y + s | 0;
+    const k = z + s | 0;
+    const l = w + s | 0;
     const t = (i + j + k + l) * G4; // Factor for 4D unskewing
     const X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
     const Y0 = j - t;
