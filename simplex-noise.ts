@@ -339,9 +339,9 @@ export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => nu
 /**
  * Creates a 4D noise function
  * @param random the random function that will be used to build the permutation table
- * @returns {NoiseFunction3D}
+ * @returns {NoiseFunction4D}
  */
-export function createNoise4D(random: RandomFn = Math.random) {
+export function createNoise4D(random: RandomFn = Math.random): NoiseFunction4D {
   const perm = buildPermutationTable(random);
   // precalculating these leads to a ~10% speedup
   const permGrad4x = new Float64Array(perm).map(v => grad4[(v % 32) * 4]);
