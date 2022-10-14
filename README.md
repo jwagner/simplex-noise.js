@@ -143,7 +143,8 @@ const simplex = {
 ## Changelog
 
 ### 4.0.1
-- Added missing `NoiseFunction4D` return type of `createNoise4D` function
+- Explicitly defined the return type of `createNoise4D` to be `NoiseFunction4D`.
+  Contributed by [satelllte](https://github.com/satelllte).
 
 ### 4.0.0
 :warning: **This release changes the API and the output of the noise functions.** :warning:
