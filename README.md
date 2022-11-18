@@ -44,6 +44,7 @@ const { createNoise2D } = require('simplex-noise');
 ```javascript
 // initialize the noise function
 const noise2D = createNoise2D();
+// returns a value between -1 and 1
 console.log(noise2D(x, y));
 ```
 
