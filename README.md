@@ -120,7 +120,7 @@ const value2d = simplex.noise2D(x, y);
 // npm install -S alea
 import { createNoise2D } from 'simplex-noise';
 import alea from 'alea';
-const noise2D = createNoise2D(Alea('seed'));
+const noise2D = createNoise2D(alea('seed'));
 const value2d = noise2D(x, y);
 
 // IMPORTANT: If you use multiple noise functions (for example 2d and 3d)
