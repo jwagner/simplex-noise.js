@@ -486,7 +486,7 @@ export function buildPermutationTable(random: RandomFn): Uint8Array {
     p[i] = i;
   }
   for (let i = 0; i < tableSize / 2 - 1; i++) {
-    const r = i + ~~(random() * (256 - i));
+    const r = i + ~~(Math.random() * (256 - i));
     const aux = p[i];
     p[i] = p[r];
     p[r] = aux;
