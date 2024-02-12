@@ -40,7 +40,10 @@ const G4 = /*#__PURE__*/ (5.0 - Math.sqrt(5.0)) / 20.0;
 // I'm really not sure why this | 0 (basically a coercion to int)
 // is making this faster but I get ~5 million ops/sec more on the
 // benchmarks across the board or a ~10% speedup.
-const fastFloor = (x: number) => Math.floor(x) | 0;
+const fastFloor = (x: number) => {
+  "worklet";
+  return Math.floor(x) | 0;
+}
 
 const grad2 = /*#__PURE__*/ new Float64Array([1, 1,
   -1, 1,
@@ -107,11 +110,13 @@ export type NoiseFunction2D = (x: number, y: number) => number;
  * @returns {NoiseFunction2D}
  */
 export function createNoise2D(random: RandomFn = Math.random): NoiseFunction2D {
+  "worklet";
   const perm = buildPermutationTable(random);
   // precalculating this yields a little ~3% performance improvement.
   const permGrad2x = new Float64Array(perm).map(v => grad2[(v % 12) * 2]);
   const permGrad2y = new Float64Array(perm).map(v => grad2[(v % 12) * 2 + 1]);
   return function noise2D(x: number, y: number): number {
+    "worklet";
     // if(!isFinite(x) || !isFinite(y)) return 0;
     let n0 = 0; // Noise contributions from the three corners
     let n1 = 0;
@@ -197,12 +202,14 @@ export type NoiseFunction3D = (x: number, y: number, z: number) => number;
  * @returns {NoiseFunction3D}
  */
 export function createNoise3D(random: RandomFn = Math.random): NoiseFunction3D {
+  "worklet";
   const perm = buildPermutationTable(random);
   // precalculating these seems to yield a speedup of over 15%
   const permGrad3x = new Float64Array(perm).map(v => grad3[(v % 12) * 3]);
   const permGrad3y = new Float64Array(perm).map(v => grad3[(v % 12) * 3 + 1]);
   const permGrad3z = new Float64Array(perm).map(v => grad3[(v % 12) * 3 + 2]);
   return function noise3D(x: number, y: number, z: number): number {
+    "worklet";
     let n0, n1, n2, n3; // Noise contributions from the four corners
     // Skew the input space to determine which simplex cell we're in
     const s = (x + y + z) * F3; // Very nice and simple skew factor for 3D
@@ -342,6 +349,7 @@ export type NoiseFunction4D = (x: number, y: number, z: number, w: number) => nu
  * @returns {NoiseFunction4D}
  */
 export function createNoise4D(random: RandomFn = Math.random): NoiseFunction4D {
+  "worklet";
   const perm = buildPermutationTable(random);
   // precalculating these leads to a ~10% speedup
   const permGrad4x = new Float64Array(perm).map(v => grad4[(v % 32) * 4]);
@@ -349,6 +357,7 @@ export function createNoise4D(random: RandomFn = Math.random): NoiseFunction4D {
   const permGrad4z = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 2]);
   const permGrad4w = new Float64Array(perm).map(v => grad4[(v % 32) * 4 + 3]);
   return function noise4D(x: number, y: number, z: number, w: number): number {
+    "worklet";
     let n0, n1, n2, n3, n4; // Noise contributions from the five corners
     // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
     const s = (x + y + z + w) * F4; // Factor for 4D skewing
@@ -480,6 +489,7 @@ export function createNoise4D(random: RandomFn = Math.random): NoiseFunction4D {
  * @private
  */
 export function buildPermutationTable(random: RandomFn): Uint8Array {
+  "worklet";
   const tableSize = 512;
   const p = new Uint8Array(tableSize);
   for (let i = 0; i < tableSize / 2; i++) {
