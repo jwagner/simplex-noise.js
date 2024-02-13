@@ -8,3 +8,4 @@
 /perf/*.log
 /perf/*.cfg
 /perf/*.json
+/tmp

@@ -4,12 +4,14 @@
   "description": "simplex-noise is a fast simplex noise implementation in Javascript. Works in node and in the browser.",
   "homepage": "https://github.com/jwagner/simplex-noise.js",
   "author": "Jonas Wagner <jonas@29a.ch> (http://29a.ch/)",
-  "main": "dist/cjs/simplex-noise.js",
-  "module": "dist/esm/simplex-noise.js",
+  "main": "./dist/cjs/simplex-noise.js",
+  "module": "./dist/esm/simplex-noise.js",
   "types": "./dist/esm/simplex-noise.d.ts",
+  "react-native": "./dist/react-native/simplex-noise.js",
   "exports": {
     "require": "./dist/cjs/simplex-noise.js",
-    "import": "./dist/esm/simplex-noise.js"
+    "import": "./dist/esm/simplex-noise.js",
+    "react-native": "./dist/react-native/simplex-noise.js"
   },
   "sideEffects": false,
   "files": [
@@ -20,12 +22,16 @@
     "dist/cjs/simplex-noise.js",
     "dist/cjs/simplex-noise.js.map",
     "dist/cjs/simplex-noise.d.ts",
+    "dist/react-native/simplex-noise.js",
+    "dist/react-native/simplex-noise.js.map",
+    "dist/react-native/simplex-noise.d.ts",
     "simplex-noise.ts"
   ],
   "devDependencies": {
     "@parcel/packager-ts": "^2.6.2",
     "@parcel/transformer-typescript-types": "^2.6.2",
     "@types/chai": "^4.3.1",
+    "@types/jscodeshift": "^0.11.11",
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.0.6",
     "@types/pngjs": "^6.0.1",
@@ -40,6 +46,7 @@
     "eslint-plugin-n": "^15.2.4",
     "eslint-plugin-promise": "^6.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "jscodeshift": "^0.15.1",
     "microtime": "^3.1.0",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",

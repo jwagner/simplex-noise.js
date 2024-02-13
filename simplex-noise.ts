@@ -40,7 +40,9 @@ const G4 = /*#__PURE__*/ (5.0 - Math.sqrt(5.0)) / 20.0;
 // I'm really not sure why this | 0 (basically a coercion to int)
 // is making this faster but I get ~5 million ops/sec more on the
 // benchmarks across the board or a ~10% speedup.
-const fastFloor = (x: number) => Math.floor(x) | 0;
+function fastFloor(x: number) {
+  return Math.floor(x) | 0;
+}
 
 const grad2 = /*#__PURE__*/ new Float64Array([1, 1,
   -1, 1,
