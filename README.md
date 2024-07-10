@@ -143,6 +143,9 @@ const simplex = {
 
 ## Changelog
 
+### 4.0.2
+- Tweaked __PURE__ annotations to avoid warnings in rollup.js. Contributed by [Damien Seguin](https://github.com/dmnsgn).
+
 ### 4.0.1
 - Explicitly defined the return type of `createNoise4D` to be `NoiseFunction4D`.
   Contributed by [satelllte](https://github.com/satelllte).
