@@ -5,7 +5,7 @@ set -e
 node_major_version=$(node --version|sed 's/v\([^.]*\).*/\1/g')
 rm -rf e2e
 mkdir -p e2e
-rm -f $($NAME*.tgz)
+rm -f "$NAME*.tgz"
 npm pack
 tarball=($NAME*.tgz)
 mv "$tarball" e2e
@@ -15,14 +15,13 @@ cd module-compatibility
 npm install "../$tarball" 
 echo "testing node commonjs"
 node commonjs.js
-if [ "$node_major_version" -ge 14 ]
-  then
-  echo "testing node esm"
-  node esm.mjs
-  echo "testing typescript"
-  cp esm.mjs typescript.ts
-  node --loader ts-node/esm typescript.ts
-fi
+
+echo "testing node esm"
+node esm.mjs
+echo "testing typescript"
+cp esm.mjs typescript.ts
+npx tsx typescript.ts
+
 echo "testing webpack commonjs"
 npx webpack --entry ./commonjs.js && node dist/main.js
 echo "testing webpack esm"
