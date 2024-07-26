@@ -6,7 +6,7 @@ Which is based on example code by Stefan Gustavson (stegu@itn.liu.se).
 With Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
 Better rank ordering method by Stefan Gustavson in 2012.
 
- Copyright (c) 2022 Jonas Wagner
+ Copyright (c) 2024 Jonas Wagner
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal

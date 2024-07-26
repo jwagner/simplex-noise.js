@@ -143,6 +143,9 @@ const simplex = {
 
 ## Changelog
 
+### 4.0.3
+- Additional tweaks to __PURE__ annotations to avoid warnings in rollup.js. Contributed by [Damien Seguin](https://github.com/dmnsgn).
+
 ### 4.0.2
 - Tweaked __PURE__ annotations to avoid warnings in rollup.js. Contributed by [Damien Seguin](https://github.com/dmnsgn).
 
