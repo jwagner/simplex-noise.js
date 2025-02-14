@@ -75,3 +75,72 @@ export function sampleFunctionToImageData(f: SampleFunction, width: number, heig
 export function sampleFunctionToImageDataOne(f: SampleFunction, width: number, height: number): ImageDataLike {
   return sampleFunctionToImageData((x, y) => f(x / width * 2 - 1, y / height * 2 - 1) * 128 + 127, width, height);
 }
+
+
+export function assertMatchesRGBAImage(actual: ImageDataLike, imageFilename: string): void {
+  if (!imageFilename.endsWith('.png')) {
+    console.log('throwing');
+    throw new Error('imageFilename must end in .png');
+  }
+  let fileBuffer;
+  try {
+    fileBuffer = fs.readFileSync(path.join(snapshotsPath, imageFilename));
+  }
+  catch (_) {
+    writeRGBAImageSnapshot(actual, imageFilename);
+    return;
+  }
+  const png = PNG.sync.read(fileBuffer);
+  if (actual.data.length !== png.data.length) {
+    throw new Error('Expected actual.length to match png.data.length');
+  }
+  const identical = actual.data.every((value, i) => value == png.data[i]);
+  if (!identical) {
+    console.log(png.data);
+    writeRGBAImageSnapshot(actual, imageFilename.replace('.png', '.error.png'));
+    throw new Error('expected data to be identitcal');
+  }
+}
+
+export function writeRGBAImageSnapshot(actual: ImageDataLike, imageFilename: string) {
+  const png = new PNG({
+    colorType: 6,
+    inputColorType: 6,
+    bitDepth: 16,
+    width: actual.width,
+    height: actual.height,
+    inputHasAlpha: false,
+  });
+  if (actual.data.length !== png.data.length) {
+    console.warn(actual.data.length, png.data.length);
+    throw new Error('Expected actual.data.length to match png.data.length');
+  }
+  png.data.forEach((_, i, a) => a[i] = actual.data[(i) | 0]);
+
+  fs.writeFileSync(path.join(snapshotsPath, imageFilename), PNG.sync.write(png.pack(), { colorType: 6 }));
+}
+
+type RGBASampleFunction = (x: number, y: number) => [number, number, number, number];
+export function sampleFunctionToRGBAImageData(f: RGBASampleFunction, width: number, height: number): ImageDataLike {
+  const imageData = {
+    width,
+    height,
+    data: new Uint8ClampedArray(width * height * 4)
+  };
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const [r, g, b, a] = f(x, y);
+      imageData.data[(y * width + x) * 4] = r;
+      imageData.data[(y * width + x) * 4 + 1] = g;
+      imageData.data[(y * width + x) * 4 + 2] = b;
+      imageData.data[(y * width + x) * 4 + 3] = a;
+    }
+  }
+  return imageData;
+}
+
+// same as sampleFunctionToImageData but x and y go from -1 .. 1 instead of 0 .. width
+// output is not scaled, scale that yourself to be between 0 and 255 for each channel
+export function sampleFunctionToRGBAImageDataOne(f: RGBASampleFunction, width: number, height: number): ImageDataLike {
+  return sampleFunctionToRGBAImageData((x, y) => f(x / width * 2 - 1, y / height * 2 - 1), width, height);
+}
